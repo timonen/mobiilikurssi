@@ -3,6 +3,14 @@ plugins {
     id 'kotlin-android'
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '5.6'
+}
+
+task prepareKotlinBuildScriptModel {
+
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
