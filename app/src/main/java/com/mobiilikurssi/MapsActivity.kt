@@ -18,18 +18,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val tracker by lazy { LocationTracker(this) }
 
-    override fun onResume() {
-        super.onResume()
-        tracker.track()
-
-        var b : TextView = findViewById(R.id.button);
-
-        b.setOnClickListener {
-            val t : TextView = findViewById(R.id.textView);
-            t.text = tracker.getCoordinates()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2)
@@ -39,6 +27,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        var b : TextView = findViewById(R.id.button)
+        b.setOnClickListener {
+            tracker.track()
+        }
+
+        tracker.onNewLocation = {
+            val t : TextView = findViewById(R.id.textView)
+            t.text = tracker.getCoordinates()
+        }
     }
 
     /**

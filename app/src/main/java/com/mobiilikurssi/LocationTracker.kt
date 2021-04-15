@@ -18,7 +18,10 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private var permissionGranted : Boolean = false
 
     override fun onLocationChanged(location : Location) {
+        onNewLocation?.invoke()
     }
+
+    var onNewLocation : (() -> Unit)? = null
 
     init {
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -33,7 +36,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     @SuppressLint("MissingPermission")
     fun track() {
         if(permissionGranted) {
-            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1f, this);
+            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0.1f, this);
             Log.i("test", "Request location");
         }
     }
