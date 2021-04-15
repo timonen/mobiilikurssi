@@ -10,8 +10,10 @@
 
     <!-- Theme colors -->
     <color name="themegreen">#44A148</color>
+    <color name="themegreen2">#7CA982</color>
     <color name="themenviolet">#190933</color>
     <color name="themegray">#666B6A</color>
     <color name="themewhite">#FBFBFB</color>
+    <color name="themeblue">#4281A4</color>
 
 </resources>

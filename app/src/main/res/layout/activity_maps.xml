@@ -9,44 +9,46 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="424dp"
+        android:layout_height="489dp"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="0dp" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?colorPrimaryVariant"
         android:text="TextView"
+        android:textColor="@color/themewhite"
         android:textSize="14sp" />
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="656dp"
-        android:layout_marginStart="-2dp"
-        android:layout_marginTop="9dp" />
 
     <Button
         android:id="@+id/button_start"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/themegreen"
+        android:layout_width="411dp"
+        android:layout_height="93dp"
+        android:background="?colorPrimary"
         android:text="@string/string_start_journey"
         android:textColor="@color/themewhite" />
 
     <Button
         android:id="@+id/button_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/themegreen"
+        android:layout_width="411dp"
+        android:layout_height="102dp"
+        android:background="?colorPrimary"
         android:text="@string/string_show_history"
         android:textColor="@color/themewhite" />
 
     <Button
         android:id="@+id/button_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/themegreen"
-        android:text="@string/string_settings_header"
+        android:layout_width="411dp"
+        android:layout_height="141dp"
+        android:background="?colorPrimary"
+        android:text="@string/string_settings"
         android:textColor="@color/themewhite" />
 
 </LinearLayout>

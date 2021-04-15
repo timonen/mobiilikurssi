@@ -1,7 +1,18 @@
 <resources>
     <string name="app_name">mobiilikurssi</string>
     <string name="title_activity_maps">Map</string>
-    <string name="string_settings_header">Asetukset</string>
+    <!--Main -->
+    <string name="string_settings">Asetukset</string>
     <string name="string_start_journey">Aloita liikkuminen</string>
     <string name="string_show_history">Näytä matkani</string>
+
+    <!--Calender -->
+    <string name="string_calendar">Kalenteri</string>
+
+
+
+    <!--Settings -->
+    <string name="string_energy">Energian yksikkö</string>
+    <string name="radio_kcal">kcal</string>
+    <string name="radio_kj">kJ</string>
 </resources>
