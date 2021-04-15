@@ -30,7 +30,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        var b : TextView = findViewById(R.id.button)
+        var b : TextView = findViewById(R.id.button_start)
         b.setOnClickListener {
             tracker.track()
         }
@@ -42,6 +42,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
             val intent = Intent(this, Settings::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.button_history).setOnClickListener {
+            val intent = Intent(this, Calendar::class.java)
             startActivity(intent)
         }
     }

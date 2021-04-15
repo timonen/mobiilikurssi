@@ -2,4 +2,6 @@
     <string name="app_name">mobiilikurssi</string>
     <string name="title_activity_maps">Map</string>
     <string name="string_settings_header">Asetukset</string>
+    <string name="string_start_journey">Aloita liikkuminen</string>
+    <string name="string_show_history">Näytä matkani</string>
 </resources>
