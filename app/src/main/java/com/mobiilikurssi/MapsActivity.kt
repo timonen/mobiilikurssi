@@ -1,8 +1,10 @@
 package com.mobiilikurssi
 
 import android.Manifest
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.TextView
 
@@ -36,6 +38,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         tracker.onNewLocation = {
             val t : TextView = findViewById(R.id.textView)
             t.text = tracker.getCoordinates()
+        }
+
+        findViewById<Button>(R.id.button_settings).setOnClickListener {
+            val intent = Intent(this, Settings::class.java)
+            startActivity(intent)
         }
     }
 
