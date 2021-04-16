@@ -1,9 +1,11 @@
 package com.mobiilikurssi
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.TextView
