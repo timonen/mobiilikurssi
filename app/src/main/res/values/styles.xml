@@ -2,5 +2,15 @@
 <resources>
 
 
-    <!-- Dont delete -->
+    <!--Calendar -->
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/themegreen</item>
+        <item name="colorPrimary">@color/themewhite</item>
+    </style>
+
+
+
+
+
+
 </resources>
