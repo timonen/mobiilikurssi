@@ -20,15 +20,26 @@
 
     <!--Goal -->
     <string name="string_time">Aika</string>
+    <string name="string_unit">Yksikkö</string>
+    <string name="string_amount">Määrä</string>
+    <string name="string_send">Lähetä</string>
 
     <!--Spinner -->
-        <string name="selected_item">Valitsit:</string>
+        <string name="selected_time">Valitsit:</string>
         <string-array name="time">
-            <item>day</item>
-            <item>week</item>
-            <item>month</item>
-            <item>year</item>
+            <item>päivä</item>
+            <item>viikko</item>
+            <item>kuukausi</item>
+            <item>vuosi</item>
         </string-array>
+
+
+    <string name="selected_format">Valitsit:</string>
+    <string-array name="format">
+        <item>energia(kcal/kj)</item>
+        <item>metri</item>
+        <item>kilometri</item>
+    </string-array>
 
 
 
