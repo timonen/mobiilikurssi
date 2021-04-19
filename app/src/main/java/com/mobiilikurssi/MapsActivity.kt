@@ -37,9 +37,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             tracker.track()
         }
 
-        tracker.onNewLocation = {
+        tracker.onNewLocation = { speed, current ->
             val t : TextView = findViewById(R.id.textView)
-            t.text = tracker.getCoordinates()
+            t.text = "Speed $speed Lat ${current.latitude} Lng ${current.longitude}"
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(current.latitude, current.longitude)))
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {

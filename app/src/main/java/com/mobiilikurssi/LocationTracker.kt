@@ -17,11 +17,28 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private var locationManager : LocationManager? = null
     private var permissionGranted : Boolean = false
 
+    private val locations : MutableList <Location> = ArrayList()
+    private var locationTime : Long = 0
+
+    @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
-        onNewLocation?.invoke()
+        val newTime = System.currentTimeMillis()
+        var speed  = 0.0f
+
+        //  Calculate the speed and distance if there's at least 2 locations
+        if(locations.count() >= 2) {
+            val timeDelta = newTime - locationTime
+            val locationDelta = location.distanceTo(locations.last())
+
+            speed = locationDelta / (timeDelta / 1000)
+        }
+
+        //  Add the location and call the user callback
+        locations.add(location)
+        onNewLocation?.invoke(speed, location)
     }
 
-    var onNewLocation : (() -> Unit)? = null
+    var onNewLocation : ((speed : Float, current : Location) -> Unit)? = null
 
     init {
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -39,15 +56,5 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0.1f, this);
             Log.i("test", "Request location");
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun getCoordinates() : String {
-        if(permissionGranted) {
-            var l: Location? = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            return "${l?.latitude} : ${l?.longitude}"
-        }
-
-        return "No permission for location"
     }
 }
