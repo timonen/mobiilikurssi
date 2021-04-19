@@ -6,7 +6,15 @@
         <item name="colorPrimaryVariant">@color/themegreen2</item>
         <item name="colorOnPrimary">@color/themeblue</item>
 
+        <!-- Statusbar -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <!--Background -->
+        <item name="android:colorBackground">@color/themegreen2</item>
+
+        <!-- Text color -->
+        <item name="android:textColor">@color/themewhite</item>
+
 
     </style>
 </resources>

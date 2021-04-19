@@ -43,12 +43,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
-            val intent = Intent(this, Settings::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Settings::class.java))
         }
         findViewById<Button>(R.id.button_history).setOnClickListener {
-            val intent = Intent(this, Calendar::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Calendar::class.java))
         }
     }
 

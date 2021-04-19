@@ -8,11 +8,29 @@
 
     <!--Calendar -->
     <string name="string_calendar">Kalenteri</string>
-
+    <string name="string_goals">Ei uusia tavoitteita</string>
+    <string name="button_goals">Uusi tavoite</string>
 
 
     <!--Settings -->
     <string name="string_energy">Energian yksikkö</string>
     <string name="radio_kcal">kcal</string>
     <string name="radio_kj">kJ</string>
+
+
+    <!--Goal -->
+    <string name="string_time">Aika</string>
+
+    <!--Spinner -->
+        <string name="selected_item">Valitsit:</string>
+        <string-array name="time">
+            <item>day</item>
+            <item>week</item>
+            <item>month</item>
+            <item>year</item>
+        </string-array>
+
+
+
+
 </resources>
