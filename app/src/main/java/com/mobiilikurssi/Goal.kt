@@ -14,9 +14,8 @@ class Goal : AppCompatActivity() {
 
         val timelayout = findViewById<LinearLayout>(R.id.time_layout)
 
-        Spinner(R.array.time, R.layout.activity_goal, timelayout)
+        val spinner = Spinner(R.array.time, R.layout.activity_goal, timelayout)
         Log.d("main", "toimii")
-
 
     }
 }
