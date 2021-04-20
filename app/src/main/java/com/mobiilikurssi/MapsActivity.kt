@@ -34,14 +34,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var b : TextView = findViewById(R.id.button_start)
         b.setOnClickListener {
-            tracker.track()
+            tracker.track(true)
         }
 
-        tracker.onNewLocation = { speed, current ->
+        tracker.onNewLocation = { speed ->
             val t : TextView = findViewById(R.id.textView)
-            t.text = "Speed $speed Lat ${current.latitude} Lng ${current.longitude}"
+            t.text = "$speed m/s ${tracker.getLastLocation()}"
+        }
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(current.latitude, current.longitude)))
+        tracker.onLocationTimeout = {
+            val t : TextView = findViewById(R.id.textView)
+            t.text = "Timeout"
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
