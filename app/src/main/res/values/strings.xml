@@ -17,7 +17,6 @@
     <string name="radio_kcal">kcal</string>
     <string name="radio_kj">kJ</string>
 
-
     <!--Goal -->
     <string name="string_time">Aika</string>
     <string name="string_unit">Yksikkö</string>
@@ -39,6 +38,7 @@
         <item>energia(kcal/kj)</item>
         <item>metri</item>
         <item>kilometri</item>
+        <item>kilogramma</item>
     </string-array>
 
 
