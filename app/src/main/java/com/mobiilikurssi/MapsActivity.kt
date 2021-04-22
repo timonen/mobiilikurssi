@@ -1,11 +1,9 @@
 package com.mobiilikurssi
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.TextView
@@ -37,14 +35,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             tracker.track(true)
         }
 
-        tracker.onNewLocation = { speed ->
+        tracker.onNewLocation = { km ->
             val t : TextView = findViewById(R.id.textView)
-            t.text = "$speed m/s ${tracker.getLastLocation()}"
-        }
-
-        tracker.onLocationTimeout = {
-            val t : TextView = findViewById(R.id.textView)
-            t.text = "Timeout"
+            t.text = "total $km km ${tracker.getLastLocation()}"
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
