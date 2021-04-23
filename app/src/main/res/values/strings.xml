@@ -32,11 +32,11 @@
             <item>vuosi</item>
         </string-array>
 
-
+    <string name="ENERGIA">kcal/kj</string>
     <string name="selected_format">Valitsit:</string>
+
     <string-array name="format">
-        <item>energia(kcal/kj)</item>
-        <item>metri</item>
+        <item>@string/ENERGIA</item>
         <item>kilometri</item>
         <item>kilogramma</item>
     </string-array>

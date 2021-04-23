@@ -76,4 +76,9 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         val location = locations.last().first
         return "${location.latitude} : ${location.longitude}"
     }
+
+    // testing
+    fun getTotalDistance() : Float {
+        return totalDistance
+    }
 }
