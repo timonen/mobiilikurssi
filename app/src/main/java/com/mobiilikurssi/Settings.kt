@@ -14,6 +14,11 @@ class Settings : AppCompatActivity() {
     var energyUnit = "kcal"
 
 
+    /**
+     * Whole class depricated deleting soon
+     */
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_settings)
@@ -33,6 +38,7 @@ class Settings : AppCompatActivity() {
         }
 
         Log.d("main", energyUnit)
+
 
     }
 

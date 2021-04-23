@@ -22,24 +22,22 @@ class Calendar : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_goals).setOnClickListener {
             startActivity(Intent(this, Goal::class.java))
-
         }
 
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
 
-        val getTime = pref.getString(R.array.time.toString(), "empty")
-        val getUnit = pref.getString(R.array.format.toString(), "empty")
+        val getTime = pref.getString("päivä", "empty")
+        val getUnit = pref.getString("kalori", "empty")
         val getAmount = pref.getString("amount", "1")
 
         goals.text = "Tavoite: $getAmount $getUnit $getTime"
-
 
        val amount = LocationTracker(this)
 
         when(getUnit) {
             "kilometri" -> completed.text = "Tavoitteesta suoritettu ${amount.getTotalDistance()} km / $getAmount km"
             "kilogramma" -> completed.text = "Not coded yet"
-            R.string.ENERGIA.toString() -> completed.text = "Not coded yet"
+            "kalori" -> completed.text = "Not coded yet"
         }
 
     }

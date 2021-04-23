@@ -23,24 +23,6 @@
     <string name="string_amount">Määrä</string>
     <string name="string_send">Lähetä</string>
 
-    <!--Spinner -->
-        <string name="selected_time">Valitsit:</string>
-        <string-array name="time">
-            <item>päivä</item>
-            <item>viikko</item>
-            <item>kuukausi</item>
-            <item>vuosi</item>
-        </string-array>
-
-    <string name="ENERGIA">kcal/kj</string>
-    <string name="selected_format">Valitsit:</string>
-
-    <string-array name="format">
-        <item>@string/ENERGIA</item>
-        <item>kilometri</item>
-        <item>kilogramma</item>
-    </string-array>
-
 
 
 

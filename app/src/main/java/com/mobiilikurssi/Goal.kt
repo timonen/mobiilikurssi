@@ -14,6 +14,10 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 
 class Goal : AppCompatActivity() {
+
+    val timeArray = arrayOf<String>("päivä", "viikko", "kuukausi", "vuosi")
+    val unitArray = arrayOf<String>("kalori", "kilometri", "kilogramma")
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,25 +31,22 @@ class Goal : AppCompatActivity() {
         val editor = pref.edit()
 
         // making spinners
-        createSpinner(R.array.time, layout1)
-        createSpinner(R.array.format, layout2)
+        createSpinner(timeArray, layout1)
+        createSpinner(unitArray, layout2)
 
         findViewById<Button>(R.id.send_button).setOnClickListener {
             // sending preferences from EditText
-            // string now changinging to Int prolly soon
+            // string now changing to Int prolly soon
             editor.putString("amount", amount.text.toString())
             editor.apply()
             startActivity(Intent(this, Calendar::class.java))
 
             //val current = LocalDateTime.now()
-
-
             }
         }
 
 
-    private fun createSpinner(list: Int, place: LinearLayout){
-        val times = resources.getStringArray(list)
+    private fun createSpinner(list: Array<String>, place: LinearLayout){
 
         // creating widget
         val spinner = Spinner(this)
@@ -59,10 +60,9 @@ class Goal : AppCompatActivity() {
 
         val adapter = ArrayAdapter(
                 this,
-                android.R.layout.simple_spinner_item, times
+                android.R.layout.simple_spinner_item, list
         )
         spinner.adapter = adapter
-
 
         spinner.onItemSelectedListener = object :
                 AdapterView.OnItemSelectedListener {
@@ -77,8 +77,7 @@ class Goal : AppCompatActivity() {
                 val pref: SharedPreferences = getSharedPreferences("GOAL", MODE_PRIVATE)
                 val editor = pref.edit()
 
-                // getting preferences = listname.toString()
-                editor.putString(list.toString(), spinner.selectedItem.toString())
+                editor.putString(list[0], spinner.selectedItem.toString())
                 editor.apply()
             }
             // nothing yet
