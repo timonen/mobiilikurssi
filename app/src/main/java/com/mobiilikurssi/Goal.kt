@@ -1,17 +1,14 @@
 package com.mobiilikurssi
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import java.time.LocalDateTime
 
 class Goal : AppCompatActivity() {
 
@@ -25,7 +22,7 @@ class Goal : AppCompatActivity() {
 
         val layout1 = findViewById<LinearLayout>(R.id.time_layout)
         val layout2 = findViewById<LinearLayout>(R.id.format_layout)
-        val amount = findViewById<EditText>(R.id.text_amount)
+        val amount = findViewById<EditText>(R.id.text_height)
 
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
         val editor = pref.edit()
@@ -36,7 +33,6 @@ class Goal : AppCompatActivity() {
 
         findViewById<Button>(R.id.send_button).setOnClickListener {
             // sending preferences from EditText
-            // string now changing to Int prolly soon
             editor.putString("amount", amount.text.toString())
             editor.apply()
             startActivity(Intent(this, Calendar::class.java))
@@ -77,6 +73,7 @@ class Goal : AppCompatActivity() {
                 val pref: SharedPreferences = getSharedPreferences("GOAL", MODE_PRIVATE)
                 val editor = pref.edit()
 
+                // lol
                 editor.putString(list[0], spinner.selectedItem.toString())
                 editor.apply()
             }

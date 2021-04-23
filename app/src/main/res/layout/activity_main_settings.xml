@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".Settings">
 
+    <EditText
+        android:id="@+id/text_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textColor="@color/themewhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.0" />
+
     <TextView
         android:id="@+id/header"
         android:layout_width="0dp"
@@ -23,52 +35,65 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <TextView
-        android:id="@+id/textview_energy"
+        android:id="@+id/textView_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/string_energy"
-        android:textColor="@color/themewhite"
+        android:text="@string/string_profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.535"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
+        app:layout_constraintTop_toTopOf="@+id/header"
+        app:layout_constraintVertical_bias="0.21" />
 
-    <RadioGroup
-        android:id="@+id/energy_group"
+    <TextView
+        android:id="@+id/textView_lenght"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/textview_energy"
-        app:layout_constraintStart_toStartOf="@+id/textview_energy"
-        app:layout_constraintTop_toBottomOf="@+id/textview_energy">
+        android:text="@string/string_length"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_profile"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile"
+        app:layout_constraintVertical_bias="0.043" />
 
-        <RadioButton
-            android:id="@+id/radio_kcal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:buttonTint="@color/themewhite"
-            android:onClick="radioEnergy"
-            android:text="@string/radio_kcal"
-            android:textColor="@color/themewhite"
-            app:layout_constraintStart_toStartOf="@+id/textview_energy"
-            app:layout_constraintTop_toBottomOf="@+id/textview_energy" />
+    <EditText
+        android:id="@+id/text_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textColor="@color/themewhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_lenght"
+        app:layout_constraintStart_toStartOf="@+id/textView_lenght"
+        app:layout_constraintTop_toBottomOf="@+id/textView_lenght"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <RadioButton
-            android:id="@+id/radio_kj"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:buttonTint="@color/themewhite"
-            android:onClick="radioEnergy"
-            android:text="@string/radio_kj"
-            android:textColor="@color/themewhite"
-            app:layout_constraintStart_toStartOf="@+id/textview_energy"
-            app:layout_constraintTop_toBottomOf="@+id/radio_kcal" />
-    </RadioGroup>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="124dp"
+        android:text="@string/string_weight"
+        app:layout_constraintEnd_toEndOf="@+id/textView_profile"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile" />
 
+    <Button
+        android:id="@+id/create_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="208dp"
+        android:background="@color/themegreen"
+        android:text="@string/string_create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_profile"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

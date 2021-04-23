@@ -16,7 +16,6 @@ class Calendar : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
-        // text gives short description on how far the user is with their goals(%)
         val goals = findViewById<TextView>(R.id.textview_goals)
         val completed = findViewById<TextView>(R.id.textView_completed)
 
@@ -30,7 +29,14 @@ class Calendar : AppCompatActivity() {
         val getUnit = pref.getString("kalori", "empty")
         val getAmount = pref.getString("amount", "1")
 
-        goals.text = "Tavoite: $getAmount $getUnit $getTime"
+        var gU = ""
+        when(getUnit) {
+            "kalori" -> gU = "kaloria"
+            "kilometri" -> gU = "kilometriä"
+            "kilogramma" -> gU = "kilogrammaa"
+        }
+
+        goals.text = "Tavoite: $getAmount $gU / $getTime"
 
        val amount = LocationTracker(this)
 

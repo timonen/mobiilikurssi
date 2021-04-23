@@ -13,9 +13,11 @@
 
 
     <!--Settings -->
-    <string name="string_energy">Energian yksikkö</string>
-    <string name="radio_kcal">kcal</string>
-    <string name="radio_kj">kJ</string>
+    <string name="string_profile">Luo profiili</string>
+    <string name="string_length">Pituus(cm)</string>
+    <string name="string_weight">Paino(kg)</string>
+    <string name="string_create">Luo</string>
+
 
     <!--Goal -->
     <string name="string_time">Aika</string>
