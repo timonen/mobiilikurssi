@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import android.widget.TextView
+import android.widget.Toast
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -33,6 +34,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var b : TextView = findViewById(R.id.button_start)
         b.setOnClickListener {
             tracker.track(true)
+            Toast.makeText(applicationContext,"Matkan mittaaminen aloitettu", Toast.LENGTH_SHORT).show()
         }
 
         tracker.onNewLocation = { km ->

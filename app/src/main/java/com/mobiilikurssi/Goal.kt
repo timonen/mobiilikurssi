@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import java.time.LocalDateTime
 
 class Goal : AppCompatActivity() {
 
-    val timeArray = arrayOf<String>("päivä", "viikko", "kuukausi", "vuosi")
-    val unitArray = arrayOf<String>("kalori", "kilometri", "kilogramma")
+    private val timeArray = arrayOf<String>("päivä", "viikko", "kuukausi", "vuosi")
+    private val unitArray = arrayOf<String>("kalori", "kilometri", "kilogramma")
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +34,22 @@ class Goal : AppCompatActivity() {
         createSpinner(unitArray, layout2)
 
         findViewById<Button>(R.id.send_button).setOnClickListener {
-            // sending preferences from EditText
+            val currentDateTime = LocalDateTime.now()
+            val year = currentDateTime.year
+            val month = currentDateTime.monthValue
+            val day = currentDateTime.dayOfMonth
+            //val set = true
+            val calendar = java.util.Calendar.getInstance()
+
+            // sending preferences
             editor.putString("amount", amount.text.toString())
+            editor.putString("year", year.toString())
+            editor.putString("month", month.toString())
+            editor.putString("day", day.toString())
+            editor.putString("time", calendar.toString())
+            //editor.putBoolean("set", set)
             editor.apply()
             startActivity(Intent(this, Calendar::class.java))
-
-            //val current = LocalDateTime.now()
             }
         }
 
@@ -73,7 +85,7 @@ class Goal : AppCompatActivity() {
                 val pref: SharedPreferences = getSharedPreferences("GOAL", MODE_PRIVATE)
                 val editor = pref.edit()
 
-                // lol
+                // key is the first name in the class variable list
                 editor.putString(list[0], spinner.selectedItem.toString())
                 editor.apply()
             }
