@@ -6,16 +6,11 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.*
-
 
 
 class Calendar : AppCompatActivity() {
@@ -32,50 +27,6 @@ class Calendar : AppCompatActivity() {
         setContentView(R.layout.activity_calendar)
 
         calendarView = findViewById(R.id.calendarView)
-        val tb = findViewById<Button>(R.id.test_button)
-
-        // lot of bugs when trying to import this
-        val calendar = java.util.Calendar.getInstance()
-
-
-
-
-        //val ft = sdf.format(time)
-        // L//og.d("main", ft)
-
-
-
-        tb.setOnClickListener {
-           // calendar.set(
-               //currentDateTime.year, currentDateTime.monthValue, currentDateTime.dayOfMonth
-            //)
-
-            //myDate.text = sdf.format(calendar.timeInMillis)
-        }
-
-
-        // ANDROID API API PLATFORM 30 FEATURES
-        //val temp = calendarView.getTime()
-        //ate = calendarView.getInstance()
-
-
-
-        //val sdf = SimpleDateFormat("yy-MM-dd")
-        //val currentdate = sdf.format
-        //myDate.text = temp.toString()
-                /*
-        calendarView.setOnDateChangeListener(CalendarView.OnDateChangeListener {
-            _, year, month, dayOfMonth −>
-            val date = dayOfMonth.toString() + "−" + (month + 1) + "−" + year
-            myDate.text = date
-        })
-
-
-            //val current = LocalDateTime.now()
-                 */
-
-
-        val sdf = SimpleDateFormat("dd.MM.yyyy")
 
         val goals = findViewById<TextView>(R.id.textview_goals)
         val completed = findViewById<TextView>(R.id.textView_completed)
@@ -90,15 +41,11 @@ class Calendar : AppCompatActivity() {
         val getTime = pref.getString("päivä", "empty")
         val getUnit = pref.getString("kalori", "empty")
         val getAmount = pref.getString("amount", "empty")
-        val year = pref.getString("year", "empty")
-        val month = pref.getString("month", "empty")
-        val day = pref.getString("day", "empty")
-        val time = pref.getString("time", "empty")
 
-        if (time != null) {
-            Log.d("main", sdf.format(time))
-        }
-        //val set = pref.getBoolean("set", false)
+        val time = pref.getString("time", "empty")
+        val day = time?.split(".")?.get(0)?.let { removeZero(it) }
+        val month = time?.split(".")?.get(1)?.let { removeZero(it) }
+        val year = time?.split(".")?.get(2)
 
         var gU = ""
         when(getUnit) {
@@ -106,7 +53,6 @@ class Calendar : AppCompatActivity() {
             "kilometri" -> gU = "kilometriä"
             "kilogramma" -> gU = "kilogrammaa"
         }
-
         goals.text = "Tavoite: $getAmount $gU / $getTime"
 
        val amount = LocationTracker(this)
@@ -123,12 +69,50 @@ class Calendar : AppCompatActivity() {
                 myDate.text = "$day.$month.$year - $newday.$month.$year"
             }
             "viikko" -> {
-                //val newweek = day.toInt().plus(7)
-                //myDate.text = "$day.$month.$year - $newday.$month.$year"
+                var daysInMonth = 0
+                when(month) {
+                    "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
+                    "4", "6", "9", "11" -> daysInMonth = 30
+                    // this will work until 2027
+                    "2" -> {
+                        if(year == "2024"){
+                            daysInMonth = 29
+                        } else {
+                            daysInMonth = 28
+                        }
+                    }
+                }
+                Log.d("main", daysInMonth.toString())
+                var newday = day?.toInt()
+                var newmonth = month?.toInt()
+                for(i in 0..7) {
+                        if (newday != null) {
+                            if (newmonth != null) {
+                                if(newday < daysInMonth){
+                                    newday += 1
+                                } else {
+                                    newday = 1
+                                    newmonth += 1
+                                }
+                            }
+                        }
+                }
+                myDate.text = "$day.$month.$year - $newday.$newmonth.$year"
+            }
+            "kuukausi" -> {
+                val newmonth = month?.toInt()?.plus(1)
+                myDate.text = "$day.$month.$year - $day.$newmonth.$year"
+            }
+            "vuosi" -> {
+                val newyear = year?.toInt()?.plus(1)
+                myDate.text = "$day.$month.$year - $day.$month.$newyear"
             }
         }
-
     }
 
+    private fun removeZero(str : String) : String {
+        val regex = "^0+(?!$)".toRegex()
+        return regex.replace(str, "")
+    }
 
 }

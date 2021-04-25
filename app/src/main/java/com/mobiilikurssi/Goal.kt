@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 
 class Goal : AppCompatActivity() {
@@ -33,20 +34,18 @@ class Goal : AppCompatActivity() {
         createSpinner(timeArray, layout1)
         createSpinner(unitArray, layout2)
 
-        findViewById<Button>(R.id.send_button).setOnClickListener {
-            val currentDateTime = LocalDateTime.now()
-            val year = currentDateTime.year
-            val month = currentDateTime.monthValue
-            val day = currentDateTime.dayOfMonth
-            //val set = true
-            val calendar = java.util.Calendar.getInstance()
+        val currentDateTime = LocalDateTime.now()
+        val calendar = java.util.Calendar.getInstance()
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
+        calendar.set(
+                currentDateTime.year, currentDateTime.monthValue, currentDateTime.dayOfMonth
+        )
+        val time = sdf.format(calendar.timeInMillis)
 
+        findViewById<Button>(R.id.send_button).setOnClickListener {
             // sending preferences
             editor.putString("amount", amount.text.toString())
-            editor.putString("year", year.toString())
-            editor.putString("month", month.toString())
-            editor.putString("day", day.toString())
-            editor.putString("time", calendar.toString())
+            editor.putString("time", time)
             //editor.putBoolean("set", set)
             editor.apply()
             startActivity(Intent(this, Calendar::class.java))
