@@ -77,7 +77,14 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return "${location.latitude} : ${location.longitude}"
     }
 
-    // testing
+    fun getLat() : Double {
+       return locations.last().first.latitude
+    }
+
+    fun getLong() : Double {
+        return locations.last().first.longitude
+    }
+
     fun getTotalDistance() : Float {
         return totalDistance
     }

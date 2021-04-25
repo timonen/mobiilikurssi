@@ -52,9 +52,7 @@ class Goal : AppCompatActivity() {
             }
         }
 
-
     private fun createSpinner(list: Array<String>, place: LinearLayout){
-
         // creating widget
         val spinner = Spinner(this)
         spinner.layoutParams = LinearLayout.LayoutParams(

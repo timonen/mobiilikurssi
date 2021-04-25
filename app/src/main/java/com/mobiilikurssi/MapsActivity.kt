@@ -62,9 +62,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-    }
+        val location = LocationTracker(this)
+
+        //TODO get location!
+            try {
+                val lat = location.getLat()
+                val long = location.getLong()
+                val sydney = LatLng(lat, long)
+                mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+                // why is this exception happening
+            } catch (e : NoSuchElementException){
+                val sydney = LatLng(-34.0, 151.0)
+                mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+            }
+
+
+        }
 }

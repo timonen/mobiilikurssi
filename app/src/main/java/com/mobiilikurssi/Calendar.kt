@@ -17,36 +17,36 @@ class Calendar : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
 
-    //abstract class Calendar : Serializable, Cloneable, Comparable<Calendar!>
-
-
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
+        //TODO show dates in calendar
         calendarView = findViewById(R.id.calendarView)
 
         val goals = findViewById<TextView>(R.id.textview_goals)
         val completed = findViewById<TextView>(R.id.textView_completed)
         val myDate = findViewById<TextView>(R.id.textView_date)
 
-
         findViewById<Button>(R.id.button_goals).setOnClickListener {
             startActivity(Intent(this, Goal::class.java))
         }
-
+        // getting preferences
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
         val getTime = pref.getString("päivä", "empty")
         val getUnit = pref.getString("kalori", "empty")
         val getAmount = pref.getString("amount", "empty")
-
         val time = pref.getString("time", "empty")
+        val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+        val startingweight = prefSettings.getString("weight", "empty")
+        // values from time -> java.util.Calendar.getInstance() as formatted
         val day = time?.split(".")?.get(0)?.let { removeZero(it) }
         val month = time?.split(".")?.get(1)?.let { removeZero(it) }
         val year = time?.split(".")?.get(2)
 
+        // text explaining the goal
         var gU = ""
         when(getUnit) {
             "kalori" -> gU = "kaloria"
@@ -57,12 +57,21 @@ class Calendar : AppCompatActivity() {
 
        val amount = LocationTracker(this)
 
+
         when(getUnit) {
             "kilometri" -> completed.text = "Tavoitteesta suoritettu ${amount.getTotalDistance()} km / $getAmount km"
-            "kilogramma" -> completed.text = "Not coded yet"
+            "kilogramma" -> {
+                if(startingweight != "empty") {
+                    completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
+                } else {
+                    completed.text = "Aseta oma painosi asetuksissa niin näät tavoitepainosi tavoiteajan kuluttua"
+                }
+            }
+            //TODO calorie counter
             "kalori" -> completed.text = "Not coded yet"
         }
 
+        // settings text (starting time - ending time)
         when(getTime) {
             "päivä" -> {
                 val newday = day?.toInt()?.plus(1)
@@ -82,7 +91,6 @@ class Calendar : AppCompatActivity() {
                         }
                     }
                 }
-                Log.d("main", daysInMonth.toString())
                 var newday = day?.toInt()
                 var newmonth = month?.toInt()
                 for(i in 0..7) {
@@ -109,10 +117,9 @@ class Calendar : AppCompatActivity() {
             }
         }
     }
-
+    // regex for replacing zero in front of number
     private fun removeZero(str : String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
     }
-
 }
