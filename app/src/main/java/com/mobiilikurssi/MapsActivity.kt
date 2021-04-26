@@ -33,8 +33,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var b : TextView = findViewById(R.id.button_start)
         b.setOnClickListener {
-            tracker.track(true)
+            tracker.toggleTrack()
             Toast.makeText(applicationContext,"Matkan mittaaminen aloitettu", Toast.LENGTH_SHORT).show()
+
+            //  Käytä tracker.getStatus()
         }
 
         tracker.onNewLocation = { km ->
@@ -50,34 +52,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        val location = LocationTracker(this)
-
-        //TODO get location!
-            try {
-                val lat = location.getLat()
-                val long = location.getLong()
-                val sydney = LatLng(lat, long)
-                mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-                // why is this exception happening
-            } catch (e : NoSuchElementException){
-                val sydney = LatLng(-34.0, 151.0)
-                mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-            }
-
-
-        }
+    }
 }

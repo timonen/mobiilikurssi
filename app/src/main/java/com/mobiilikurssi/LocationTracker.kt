@@ -21,6 +21,8 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private var startTime : Long = 0
     private var totalDistance = 0.0f;
 
+    private var tracking = false;
+
     @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
         val newTime = System.currentTimeMillis()
@@ -57,8 +59,11 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     }
 
     @SuppressLint("MissingPermission")
-    fun track(enabled : Boolean) {
-        if(enabled) {
+    fun toggleTrack() {
+        //  Toggle from true -> false or false -> true
+        tracking = !tracking
+
+        if(tracking) {
             if (permissionGranted) {
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1.5f, this);
                 startTime = System.currentTimeMillis()
@@ -77,15 +82,10 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return "${location.latitude} : ${location.longitude}"
     }
 
-    fun getLat() : Double {
-       return locations.last().first.latitude
-    }
-
-    fun getLong() : Double {
-        return locations.last().first.longitude
-    }
-
-    fun getTotalDistance() : Float {
-        return totalDistance
+    fun getStatus() : String {
+        return when(tracking) {
+            true -> "Lopeta seuranta"
+            false -> "Aloita seuranta"
+        }
     }
 }
