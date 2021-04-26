@@ -59,16 +59,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             var previousLocation : Location? = null
             var timeSum : Long = 0
 
+            val opt = PolylineOptions()
             tracker.forEachLocation { location, timeDiff ->
                 if(processed > 0) {
                     val prev : Location = previousLocation as Location
 
                     //  Connect the locations with lines
-                    val line: Polyline = googleMap.addPolyline(PolylineOptions()
-                            .add(LatLng(prev.latitude, prev.longitude), LatLng(location.latitude, location.longitude))
+                    opt.add(LatLng(prev.latitude, prev.longitude),
+                            LatLng(location.latitude, location.longitude))
                             .width(5f)
-                            .color(Color.RED))
+                            .color(Color.RED)
                 }
+
+                googleMap.addPolyline(opt)
 
                 previousLocation = location
                 timeSum += timeDiff
@@ -77,12 +80,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             //  Get average speed by calculating distance / time
             val averageSpeedMS : Float = tracker.getTotalMeters() / (timeSum / 1000)
-            Toast.makeText(applicationContext, "Keskinopeus $averageSpeedMS", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Avg $averageSpeedMS Processed $processed", Toast.LENGTH_SHORT).show()
         }
 
         tracker.onNewLocation = {
             val t : TextView = findViewById(R.id.textView)
-            t.text = "total ${tracker.getTotalKilometers()} km ${tracker.getLastLocation()}"
+            t.text = "total ${tracker.getTotalMeters()} km ${tracker.getLastLocation()}"
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {

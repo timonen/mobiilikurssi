@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.location.Location
 import android.location.LocationListener
 import android.content.pm.PackageManager
+import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,7 +24,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
     private var tracking = false;
 
-    @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
         val newTime = System.currentTimeMillis()
 
@@ -35,6 +35,9 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         //  Add the location and call the user callback
         locations.add(Pair(location, newTime))
         onNewLocation?.invoke()
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
     }
 
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
@@ -67,18 +70,17 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
         if(tracking) {
             if (permissionGranted) {
-                locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1.5f, this);
-                startTime = System.currentTimeMillis()
-                Log.i("test", "Request location");
-
+                locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
                 onStartTracking?.invoke()
+                startTime = System.currentTimeMillis()
             }
         }
 
         else {
-            Log.i("test", "Stop Request location");
             locationManager?.removeUpdates(this)
             onEndTracking?.invoke()
+            locations.clear()
+            totalDistance = 0.0f
         }
     }
 
