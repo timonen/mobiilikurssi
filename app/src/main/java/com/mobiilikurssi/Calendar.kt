@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 class Calendar : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
+    var completed = findViewById<TextView>(R.id.textView_completed)
+
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -27,7 +29,6 @@ class Calendar : AppCompatActivity() {
         calendarView = findViewById(R.id.calendarView)
 
         val goals = findViewById<TextView>(R.id.textview_goals)
-        val completed = findViewById<TextView>(R.id.textView_completed)
         val myDate = findViewById<TextView>(R.id.textView_date)
 
         findViewById<Button>(R.id.button_goals).setOnClickListener {
@@ -55,11 +56,9 @@ class Calendar : AppCompatActivity() {
         }
         goals.text = "Tavoite: $getAmount $gU / $getTime"
 
-       val amount = LocationTracker(this)
-
 
         when(getUnit) {
-            "kilometri" -> completed.text = "Tavoitteesta suoritettu ${amount.getTotalDistance()} km / $getAmount km"
+            "kilometri" -> completed.text = "Tavoitteesta suoritettu ${LocationTracker(this).getTotalDistance()} km / $getAmount km"
             "kilogramma" -> {
                 if(startingweight != "empty") {
                     completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"

@@ -48,7 +48,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(Intent(this, Settings::class.java))
         }
         findViewById<Button>(R.id.button_history).setOnClickListener {
-            startActivity(Intent(this, Calendar::class.java))
+            val intent = Intent(this, Calendar::class.java).apply {
+                putExtra("totalkm", tracker.getTotalDistance())
+            }
+            startActivity(intent)
         }
     }
 

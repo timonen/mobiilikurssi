@@ -44,14 +44,13 @@ class Settings : AppCompatActivity() {
         }
     }
 
+    //return a description of weight based on bmi
     private fun bmiSettings(bmi: Double): String {
         return when(bmi) {
             in 0.0..18.5 -> "Olet alipainoinen"
-            in 18.6..24.9 -> "Olet normaalipainoinen"
-            in 25.0..29.0 -> "Olet ylipainoinen"
+            in 18.5..24.9 -> "Olet normaalipainoinen"
+            in 24.9..29.0 -> "Olet ylipainoinen"
             else -> "Olet liikalihava"
         }
     }
-
-
 }
