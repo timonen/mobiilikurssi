@@ -87,6 +87,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return "${location.latitude} : ${location.longitude}"
     }
 
-    fun getTotalMeters() = totalDistance / 1000
+    fun getTotalMeters() = totalDistance
     fun getTotalKilometers() = totalDistance / 1000
 }
