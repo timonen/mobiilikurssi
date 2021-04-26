@@ -16,8 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 class Calendar : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
-    var completed = findViewById<TextView>(R.id.textView_completed)
-
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -28,8 +26,18 @@ class Calendar : AppCompatActivity() {
         //TODO show dates in calendar
         calendarView = findViewById(R.id.calendarView)
 
-        val goals = findViewById<TextView>(R.id.textview_goals)
-        val myDate = findViewById<TextView>(R.id.textView_date)
+        val totalkm = intent.getFloatExtra("totalkm", 0.0f)
+
+        // textViews by default
+        val goals = findViewById<TextView>(R.id.textview_goals).apply {
+            this.text = "Ei uusia tavoitteita"
+        }
+        val myDate = findViewById<TextView>(R.id.textView_date).apply {
+            this.text = ""
+        }
+        val completed = findViewById<TextView>(R.id.textView_completed).apply {
+            this.text = ""
+        }
 
         findViewById<Button>(R.id.button_goals).setOnClickListener {
             startActivity(Intent(this, Goal::class.java))
@@ -58,7 +66,7 @@ class Calendar : AppCompatActivity() {
 
 
         when(getUnit) {
-            "kilometri" -> completed.text = "Tavoitteesta suoritettu ${LocationTracker(this).getTotalDistance()} km / $getAmount km"
+            "kilometri" -> completed.text = "Tavoitteesta suoritettu $totalkm km / $getAmount km"
             "kilogramma" -> {
                 if(startingweight != "empty") {
                     completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
