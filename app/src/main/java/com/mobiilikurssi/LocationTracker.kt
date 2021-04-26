@@ -34,7 +34,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
         //  Add the location and call the user callback
         locations.add(Pair(location, newTime))
-        onNewLocation?.invoke(totalDistance / 1000)
+        onNewLocation?.invoke()
     }
 
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
@@ -46,7 +46,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
     }
 
-    var onNewLocation : ((totalKilometers : Float) -> Unit)? = null
+    var onNewLocation : (() -> Unit)? = null
 
     init {
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -82,10 +82,10 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return "${location.latitude} : ${location.longitude}"
     }
 
-    fun getStatus() : String {
-        return when(tracking) {
-            true -> "Lopeta seuranta"
-            false -> "Aloita seuranta"
-        }
+    fun getTotalDistance() = totalDistance / 1000
+
+    fun getStatus() : String = when(tracking) {
+        true -> "Lopeta seuranta"
+        false -> "Aloita seuranta"
     }
 }

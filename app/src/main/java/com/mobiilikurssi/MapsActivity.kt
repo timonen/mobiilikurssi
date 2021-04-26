@@ -39,9 +39,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //  Käytä tracker.getStatus()
         }
 
-        tracker.onNewLocation = { km ->
+        tracker.onNewLocation = {
             val t : TextView = findViewById(R.id.textView)
-            t.text = "total $km km ${tracker.getLastLocation()}"
+            t.text = "total ${tracker.getTotalDistance()} km ${tracker.getLastLocation()}"
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
