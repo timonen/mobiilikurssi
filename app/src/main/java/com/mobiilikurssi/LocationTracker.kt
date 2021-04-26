@@ -47,6 +47,8 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     }
 
     var onNewLocation : (() -> Unit)? = null
+    var onStartTracking : (() -> Unit)? = null
+    var onEndTracking : (() -> Unit)? = null
 
     init {
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -68,12 +70,15 @@ class LocationTracker(private val ctx : Context) : LocationListener {
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1.5f, this);
                 startTime = System.currentTimeMillis()
                 Log.i("test", "Request location");
+
+                onStartTracking?.invoke()
             }
         }
 
         else {
             Log.i("test", "Stop Request location");
             locationManager?.removeUpdates(this)
+            onEndTracking?.invoke()
         }
     }
 
@@ -82,10 +87,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return "${location.latitude} : ${location.longitude}"
     }
 
-    fun getTotalDistance() = totalDistance / 1000
-
-    fun getStatus() : String = when(tracking) {
-        true -> "Lopeta seuranta"
-        false -> "Aloita seuranta"
-    }
+    fun getTotalMeters() = totalDistance / 1000
+    fun getTotalKilometers() = totalDistance / 1000
 }
