@@ -1,7 +1,17 @@
 package com.mobiilikurssi
+/*
+FORMULA FOR CALORIECOUNTER:
+https://www.verywellfit.com/how-many-calories-you-burn-during-exercise-4111064
+Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
 
+MET (metabolic equivalent for task)
+Since this is not an medical application we feel comfortable
+using formula: 1 km/h = 1.1 MET
+https://metscalculator.com/
+ */
 import android.Manifest
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -94,8 +104,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         findViewById<Button>(R.id.button_history).setOnClickListener {
             val intent = Intent(this, Calendar::class.java).apply {
                 putExtra("totalkm", tracker.getTotalKilometers())
+                // here add values for duration and avgSpeed parameters
+                // these are just for testing
+                putExtra("totalkcal", getTotalCalories(30, 5.0))
             }
             startActivity(intent)
         }
+    }
+
+    private fun getTotalCalories(duration : Int, avgSpeed : Double) : Double {
+        val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+        val weight = pref.getString("weight", "empty")?.toInt()!!
+        return duration * ((avgSpeed * 1.1) * 3.5 * weight).div(200)
     }
 }

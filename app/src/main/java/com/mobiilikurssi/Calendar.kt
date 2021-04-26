@@ -27,6 +27,7 @@ class Calendar : AppCompatActivity() {
         calendarView = findViewById(R.id.calendarView)
 
         val totalkm = "%.2f".format(intent.getFloatExtra("totalkm", 0.0f))
+        val totalkcal = "%.2f".format(intent.getDoubleExtra("totalkcal", 0.0))
 
         // textViews by default
         val goals = findViewById<TextView>(R.id.textview_goals).apply {
@@ -75,7 +76,7 @@ class Calendar : AppCompatActivity() {
                 }
             }
             //TODO calorie counter
-            "kalori" -> completed.text = "Not coded yet"
+            "kalori" -> completed.text = "Tavoitteesta suoritettu $totalkcal kcal / $getAmount kcal"
         }
 
         // settings text (starting time - ending time)
