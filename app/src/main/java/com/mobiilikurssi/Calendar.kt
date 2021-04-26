@@ -26,7 +26,7 @@ class Calendar : AppCompatActivity() {
         //TODO show dates in calendar
         calendarView = findViewById(R.id.calendarView)
 
-        val totalkm = intent.getFloatExtra("totalkm", 0.0f)
+        val totalkm = "%.2f".format(intent.getFloatExtra("totalkm", 0.0f))
 
         // textViews by default
         val goals = findViewById<TextView>(R.id.textview_goals).apply {
@@ -89,12 +89,18 @@ class Calendar : AppCompatActivity() {
                 when(month) {
                     "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
                     "4", "6", "9", "11" -> daysInMonth = 30
-                    // this will work until 2027
+
                     "2" -> {
-                        if(year == "2024"){
-                            daysInMonth = 29
-                        } else {
-                            daysInMonth = 28
+                        // leap year check
+                        val y = year?.toInt()
+                        if (y != null) {
+                            if(y % 4 == 0) {
+                                if(y % 100 == 0) {
+                                    if(y % 400 == 0) { daysInMonth = 29 }
+                                } else
+                                    daysInMonth = 29
+                            } else
+                                daysInMonth = 28
                         }
                     }
                 }

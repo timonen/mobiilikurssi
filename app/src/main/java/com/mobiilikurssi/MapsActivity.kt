@@ -42,13 +42,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         tracker.onStartTracking = {
             Toast.makeText(applicationContext, "Matkan seuraaminen aloitettu", Toast.LENGTH_SHORT).show()
-            var toggleTrack : TextView = findViewById(R.id.button_start)
+            val btn = findViewById<Button>(R.id.button_start)
+            var toggleTrack : TextView = btn
+            btn.setBackgroundColor(resources.getColor(R.color.chili))
             toggleTrack.text = "Lopeta seuranta"
         }
 
         tracker.onEndTracking = {
             Toast.makeText(applicationContext, "Matkan seuraaminen lopetettu", Toast.LENGTH_SHORT).show()
-            var toggleTrack : TextView = findViewById(R.id.button_start)
+            val btn = findViewById<Button>(R.id.button_start)
+            var toggleTrack : TextView = btn
+            btn.setBackgroundColor(resources.getColor(R.color.themegreen))
             toggleTrack.text = "Aloita liikkuminen"
 
             var processed = 0
