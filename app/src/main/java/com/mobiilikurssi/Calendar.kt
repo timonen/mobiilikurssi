@@ -65,9 +65,16 @@ class Calendar : AppCompatActivity() {
         }
         goals.text = "Tavoite: $getAmount $gU / $getTime"
 
-
         when(getUnit) {
-            "kilometri" -> completed.text = "Tavoitteesta suoritettu $totalkm km / $getAmount km"
+            "kilometri" -> {
+                if (getAmount != null) {
+                    if(totalkm < getAmount) {
+                        completed.text = "Tavoitteesta suoritettu $totalkm km / $getAmount km"
+                    } else {
+                        completed.text = "Onnittelut, tavoite suoritettu"
+                    }
+                }
+            }
             "kilogramma" -> {
                 if(startingweight != "empty") {
                     completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
@@ -75,8 +82,15 @@ class Calendar : AppCompatActivity() {
                     completed.text = "Aseta oma painosi asetuksissa niin näät tavoitepainosi tavoiteajan kuluttua"
                 }
             }
-            //TODO calorie counter
-            "kalori" -> completed.text = "Tavoitteesta suoritettu $totalkcal kcal / $getAmount kcal"
+            "kalori" -> {
+                if (getAmount != null) {
+                    if(totalkcal < getAmount) {
+                        completed.text = "Tavoitteesta suoritettu $totalkcal kcal / $getAmount kcal"
+                    } else {
+                        completed.text = "Onnittelut, tavoite suoritettu"
+                    }
+                }
+            }
         }
 
         // settings text (starting time - ending time)
@@ -135,5 +149,11 @@ class Calendar : AppCompatActivity() {
     private fun removeZero(str : String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
+    }
+
+    // going back to MapsActivity even if from Goal
+    override fun onBackPressed() {
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
     }
 }

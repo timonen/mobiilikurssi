@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -51,18 +52,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         tracker.onStartTracking = {
-            Toast.makeText(applicationContext, "Matkan seuraaminen aloitettu", Toast.LENGTH_SHORT).show()
             val btn = findViewById<Button>(R.id.button_start)
             var toggleTrack : TextView = btn
-            btn.setBackgroundColor(resources.getColor(R.color.chili))
+            btn.setBackgroundColor(ContextCompat.getColor(this, R.color.mapred))
             toggleTrack.text = "Lopeta seuranta"
         }
 
         tracker.onEndTracking = {
-            Toast.makeText(applicationContext, "Matkan seuraaminen lopetettu", Toast.LENGTH_SHORT).show()
             val btn = findViewById<Button>(R.id.button_start)
             var toggleTrack : TextView = btn
-            btn.setBackgroundColor(resources.getColor(R.color.themegreen))
+            btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegreen))
             toggleTrack.text = "Aloita liikkuminen"
 
             var processed = 0

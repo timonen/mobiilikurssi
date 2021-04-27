@@ -17,7 +17,6 @@ class Goal : AppCompatActivity() {
     private val timeArray = arrayOf<String>("päivä", "viikko", "kuukausi", "vuosi")
     private val unitArray = arrayOf<String>("kalori", "kilometri", "kilogramma")
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,6 @@ class Goal : AppCompatActivity() {
             // sending preferences
             editor.putString("amount", amount.text.toString())
             editor.putString("time", time)
-            //editor.putBoolean("set", set)
             editor.apply()
             startActivity(Intent(this, Calendar::class.java))
             }
