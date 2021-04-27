@@ -37,9 +37,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         onNewLocation?.invoke()
     }
 
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-    }
-
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
         var lastTime = startTime
 
@@ -88,6 +85,16 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         val location = locations.last().first
         return "${location.latitude} : ${location.longitude}"
     }
+
+    fun getDurationSeconds() : Long {
+        if(!tracking)
+            return 0
+
+        val newTime = System.currentTimeMillis()
+        return (newTime - startTime) / 1000
+    }
+
+    fun getDurationMinutes() : Long = getDurationSeconds() / 60
 
     fun getTotalMeters() = totalDistance
     fun getTotalKilometers() = totalDistance / 1000
