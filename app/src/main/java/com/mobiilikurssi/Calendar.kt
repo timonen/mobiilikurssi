@@ -52,9 +52,16 @@ class Calendar : AppCompatActivity() {
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
         // values from time -> java.util.Calendar.getInstance() as formatted
-        val day = time?.split(".")?.get(0)?.let { removeZero(it) }
-        val month = time?.split(".")?.get(1)?.let { removeZero(it) }
-        val year = time?.split(".")?.get(2)
+
+        var day = ""
+        var month = ""
+        var year = ""
+
+        if(time != "empty") {
+            day = time?.split(".")?.get(0)?.let { removeZero(it) }.toString()
+            month = time?.split(".")?.get(1)?.let { removeZero(it) }.toString()
+            year = time?.split(".")?.get(2).toString()
+        }
 
         // text explaining the goal
         var gU = ""
