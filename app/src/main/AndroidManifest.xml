@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobiilikurssi">
-        <activity android:name=".Goal"></activity>
+        <activity android:name=".Goal" />
         <activity android:name=".Calendar" />
         <activity android:name=".Settings" />
         <!--
