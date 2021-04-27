@@ -21,6 +21,14 @@ class Calendar : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // if from Goal go back to MapsActivity
+        if (intent.getBooleanExtra("EXIT", false)) {
+            finish();
+        }
+
+        Log.d("main", "onCreate called")
+
         setContentView(R.layout.activity_calendar)
 
         //TODO show dates in calendar
@@ -30,6 +38,8 @@ class Calendar : AppCompatActivity() {
         val totalkm = intent.getFloatExtra("totalkm", 0.0f)
         val totalkcal = intent.getDoubleExtra("totalkcal", 0.0)
 
+
+        // check this out next
         Log.d("main", totalkcal.toString())
 
         // textViews by default
@@ -52,13 +62,17 @@ class Calendar : AppCompatActivity() {
         val getUnit = pref.getString("kalori", "empty")
         val getAmount = pref.getString("amount", "empty")
         val time = pref.getString("time", "empty")
+
+
+
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
 
+        // get values from time
         var day = ""
         var month = ""
         var year = ""
-        // values from time -> java.util.Calendar.getInstance() as formatted
+        // null check
         if(time != "empty") {
             day = time?.split(".")?.get(0)?.let { removeZero(it) }.toString()
             month = time?.split(".")?.get(1)?.let { removeZero(it) }.toString()
@@ -74,12 +88,11 @@ class Calendar : AppCompatActivity() {
         }
         goals.text = "Tavoite: $getAmount $gU / $getTime"
 
+
         when(getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
-                 
                         completed.text = "Tavoitteesta suoritettu $totalkm km / $getAmount km"
-
                 }
             }
             "kilogramma" -> {
@@ -91,9 +104,7 @@ class Calendar : AppCompatActivity() {
             }
             "kalori" -> {
                 if (getAmount != null) {
-
                         completed.text = "Tavoitteesta suoritettu $totalkcal kcal / $getAmount kcal"
-
                 }
             }
         }
@@ -148,11 +159,5 @@ class Calendar : AppCompatActivity() {
     private fun removeZero(str : String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
-    }
-
-    // going back to MapsActivity even if from Goal
-    override fun onBackPressed() {
-        val intent = Intent(this, MapsActivity::class.java)
-        startActivity(intent)
     }
 }

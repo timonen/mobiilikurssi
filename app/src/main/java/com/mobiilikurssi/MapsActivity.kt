@@ -116,7 +116,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun getTotalCalories(duration : Double, avgSpeed : Double, weight : Int) : Double {
+    private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Double {
         return (duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)
     }
 }
