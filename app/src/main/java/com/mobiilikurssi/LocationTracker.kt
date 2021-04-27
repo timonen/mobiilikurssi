@@ -94,7 +94,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return (newTime - startTime) / 1000
     }
 
-    fun getDurationMinutes() : Long = getDurationSeconds() / 60
+    fun getDurationMinutes() : Double = getDurationSeconds() as Double / 60
 
     fun getTotalMeters() = totalDistance
     fun getTotalKilometers() = totalDistance / 1000
