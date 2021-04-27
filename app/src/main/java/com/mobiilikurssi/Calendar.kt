@@ -26,8 +26,11 @@ class Calendar : AppCompatActivity() {
         //TODO show dates in calendar
         calendarView = findViewById(R.id.calendarView)
 
-        val totalkm = "%.2f".format(intent.getFloatExtra("totalkm", 0.0f))
-        val totalkcal = "%.2f".format(intent.getDoubleExtra("totalkcal", 0.0))
+        // format these values
+        val totalkm = intent.getFloatExtra("totalkm", 0.0f)
+        val totalkcal = intent.getDoubleExtra("totalkcal", 0.0)
+
+        Log.d("main", totalkcal.toString())
 
         // textViews by default
         val goals = findViewById<TextView>(R.id.textview_goals).apply {
@@ -51,12 +54,11 @@ class Calendar : AppCompatActivity() {
         val time = pref.getString("time", "empty")
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
-        // values from time -> java.util.Calendar.getInstance() as formatted
 
         var day = ""
         var month = ""
         var year = ""
-
+        // values from time -> java.util.Calendar.getInstance() as formatted
         if(time != "empty") {
             day = time?.split(".")?.get(0)?.let { removeZero(it) }.toString()
             month = time?.split(".")?.get(1)?.let { removeZero(it) }.toString()
@@ -75,11 +77,9 @@ class Calendar : AppCompatActivity() {
         when(getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
-                    if(totalkm < getAmount) {
+                 
                         completed.text = "Tavoitteesta suoritettu $totalkm km / $getAmount km"
-                    } else {
-                        completed.text = "Onnittelut, tavoite suoritettu"
-                    }
+
                 }
             }
             "kilogramma" -> {
@@ -91,11 +91,9 @@ class Calendar : AppCompatActivity() {
             }
             "kalori" -> {
                 if (getAmount != null) {
-                    if(totalkcal < getAmount) {
+
                         completed.text = "Tavoitteesta suoritettu $totalkcal kcal / $getAmount kcal"
-                    } else {
-                        completed.text = "Onnittelut, tavoite suoritettu"
-                    }
+
                 }
             }
         }
@@ -103,7 +101,7 @@ class Calendar : AppCompatActivity() {
         // settings text (starting time - ending time)
         when(getTime) {
             "päivä" -> {
-                val newday = day?.toInt()?.plus(1)
+                val newday = day.toInt().plus(1)
                 myDate.text = "$day.$month.$year - $newday.$month.$year"
             }
             "viikko" -> {
@@ -114,8 +112,7 @@ class Calendar : AppCompatActivity() {
 
                     "2" -> {
                         // leap year check
-                        val y = year?.toInt()
-                        if (y != null) {
+                        val y = year.toInt()
                             if(y % 4 == 0) {
                                 if(y % 100 == 0) {
                                     if(y % 400 == 0) { daysInMonth = 29 }
@@ -125,29 +122,24 @@ class Calendar : AppCompatActivity() {
                                 daysInMonth = 28
                         }
                     }
-                }
-                var newday = day?.toInt()
-                var newmonth = month?.toInt()
+                var newday = day.toInt()
+                var newmonth = month.toInt()
                 for(i in 0..7) {
-                        if (newday != null) {
-                            if (newmonth != null) {
                                 if(newday < daysInMonth){
                                     newday += 1
                                 } else {
                                     newday = 1
                                     newmonth += 1
                                 }
-                            }
-                        }
-                }
+                    }
                 myDate.text = "$day.$month.$year - $newday.$newmonth.$year"
             }
             "kuukausi" -> {
-                val newmonth = month?.toInt()?.plus(1)
+                val newmonth = month.toInt().plus(1)
                 myDate.text = "$day.$month.$year - $day.$newmonth.$year"
             }
             "vuosi" -> {
-                val newyear = year?.toInt()?.plus(1)
+                val newyear = year.toInt().plus(1)
                 myDate.text = "$day.$month.$year - $day.$month.$newyear"
             }
         }

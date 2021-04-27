@@ -100,20 +100,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         findViewById<Button>(R.id.button_settings).setOnClickListener {
             startActivity(Intent(this, Settings::class.java))
         }
+
         findViewById<Button>(R.id.button_history).setOnClickListener {
+            val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+            val weight = pref.getString("weight", "empty")?.toInt()
+
             val intent = Intent(this, Calendar::class.java).apply {
                 putExtra("totalkm", tracker.getTotalKilometers())
-                // here add values for duration and avgSpeed parameters
-                // these are just for testing
-                putExtra("totalkcal", getTotalCalories(30, 5.0))
+                if(weight != null) {
+                    val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
+                    putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight))
+                }
             }
             startActivity(intent)
         }
     }
 
-    private fun getTotalCalories(duration : Int, avgSpeed : Double) : Double {
-        val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-        val weight = pref.getString("weight", "empty")?.toInt()!!
-        return duration * ((avgSpeed * 1.1) * 3.5 * weight).div(200)
+    private fun getTotalCalories(duration : Double, avgSpeed : Double, weight : Int) : Double {
+        return (duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)
     }
 }
