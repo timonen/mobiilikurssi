@@ -34,7 +34,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
         //  Add the location and call the user callback
         locations.add(Pair(location, newTime))
-        onNewLocation?.invoke()
+        onNewLocation?.invoke(locations.count())
     }
 
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
@@ -46,7 +46,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
     }
 
-    var onNewLocation : (() -> Unit)? = null
+    var onNewLocation : ((locationCount : Int) -> Unit)? = null
     var onStartTracking : (() -> Unit)? = null
     var onEndTracking : (() -> Unit)? = null
 

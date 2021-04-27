@@ -92,9 +92,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(applicationContext, "Avg $averageSpeedMS Processed $processed", Toast.LENGTH_SHORT).show()
         }
 
-        tracker.onNewLocation = {
+        tracker.onNewLocation = { count ->
             val t : TextView = findViewById(R.id.textView)
-            t.text = "total ${tracker.getTotalMeters()} km ${tracker.getLastLocation()}"
+            t.text = "count $count total ${tracker.getTotalMeters()} km ${tracker.getLastLocation()}"
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
