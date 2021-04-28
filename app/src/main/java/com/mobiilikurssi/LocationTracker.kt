@@ -9,12 +9,11 @@ import android.location.LocationManager
 import android.location.Location
 import android.location.LocationListener
 import android.content.pm.PackageManager
-import android.location.GpsStatus
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class LocationTracker(private val ctx : Context) : LocationListener, GpsStatus.Listener {
+class LocationTracker(private val ctx : Context) : LocationListener {
     private var locationManager : LocationManager? = null
     private var permissionGranted : Boolean = false
 
@@ -23,12 +22,6 @@ class LocationTracker(private val ctx : Context) : LocationListener, GpsStatus.L
     private var totalDistance = 0.0f;
 
     private var tracking = false;
-
-    override fun onGpsStatusChanged(event: Int) {
-        when(event) {
-            GpsStatus.GPS_EVENT_SATELLITE_STATUS -> {}
-        }
-    }
 
     override fun onLocationChanged(location : Location) {
         val newTime = System.currentTimeMillis()
@@ -73,6 +66,10 @@ class LocationTracker(private val ctx : Context) : LocationListener, GpsStatus.L
 
         if(tracking) {
             if (permissionGranted) {
+                onEndTracking?.invoke()
+                locations.clear()
+                totalDistance = 0.0f
+
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
                 onStartTracking?.invoke()
                 startTime = System.currentTimeMillis()
@@ -81,9 +78,6 @@ class LocationTracker(private val ctx : Context) : LocationListener, GpsStatus.L
 
         else {
             locationManager?.removeUpdates(this)
-            onEndTracking?.invoke()
-            locations.clear()
-            totalDistance = 0.0f
         }
     }
 
