@@ -66,7 +66,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
         if(tracking) {
             if (permissionGranted) {
-                onEndTracking?.invoke()
                 locations.clear()
                 totalDistance = 0.0f
 
@@ -78,6 +77,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
         else {
             locationManager?.removeUpdates(this)
+            onEndTracking?.invoke()
         }
     }
 
