@@ -24,6 +24,12 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private var tracking = false;
 
     override fun onLocationChanged(location : Location) {
+        //  If this is the first location, do preparation
+        if(locations.count() == 0) {
+            onStartTracking?.invoke()
+            startTime = System.currentTimeMillis()
+        }
+
         val newTime = System.currentTimeMillis()
 
         if(locations.count() >= 1) {
@@ -70,8 +76,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
                 totalDistance = 0.0f
 
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
-                onStartTracking?.invoke()
-                startTime = System.currentTimeMillis()
             }
         }
 
