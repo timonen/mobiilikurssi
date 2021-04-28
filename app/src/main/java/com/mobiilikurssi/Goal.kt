@@ -3,12 +3,12 @@ package com.mobiilikurssi
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 
@@ -46,9 +46,17 @@ class Goal : AppCompatActivity() {
             editor.putString("amount", amount.text.toString())
             editor.putString("time", time)
             editor.apply()
-            startActivity(Intent(this, Calendar::class.java))
-            }
+            Toast.makeText(applicationContext, "Tavoite asetettu", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(applicationContext, Calendar::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.putExtra("EXIT", true)
+        startActivity(intent)
+    }
 
     private fun createSpinner(list: Array<String>, place: LinearLayout){
         // creating widget

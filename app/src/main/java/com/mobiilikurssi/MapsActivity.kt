@@ -13,8 +13,10 @@ import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -45,13 +47,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
+    fun toggleStartButton() {
+        val startButton : TextView = findViewById(R.id.button_start)
+        Log.i("test", "clickable ${startButton.isClickable}")
+        val state = !startButton.isClickable
+        Log.i("test", "Now $state}")
+
+        when(state) {
+            false -> startButton.background.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
+            true -> startButton.background.clearColorFilter()
+        }
+
+        startButton.isClickable = state
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         var startButton : TextView = findViewById(R.id.button_start)
         startButton.setOnClickListener {
+            toggleStartButton()
             tracker.toggleTrack()
         }
 
         tracker.onStartTracking = {
+            toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
             var toggleTrack : TextView = btn
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.mapred))
@@ -59,6 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         tracker.onEndTracking = {
+            toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
             var toggleTrack : TextView = btn
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegreen))
@@ -116,7 +135,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun getTotalCalories(duration : Double, avgSpeed : Double, weight : Int) : Double {
+    private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Double {
         return (duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)
     }
 }

@@ -9,7 +9,6 @@ import android.location.LocationManager
 import android.location.Location
 import android.location.LocationListener
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -67,6 +66,9 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
         if(tracking) {
             if (permissionGranted) {
+                locations.clear()
+                totalDistance = 0.0f
+
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
                 onStartTracking?.invoke()
                 startTime = System.currentTimeMillis()
@@ -76,8 +78,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         else {
             locationManager?.removeUpdates(this)
             onEndTracking?.invoke()
-            locations.clear()
-            totalDistance = 0.0f
         }
     }
 
