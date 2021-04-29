@@ -123,22 +123,13 @@ class Calendar : AppCompatActivity() {
             }
             "viikko" -> {
                 var daysInMonth = 0
+                val y = year.toInt()
                 when(month) {
                     "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
                     "4", "6", "9", "11" -> daysInMonth = 30
-
-                    "2" -> {
-                        // leap year check
-                        val y = year.toInt()
-                            if(y % 4 == 0) {
-                                if(y % 100 == 0) {
-                                    if(y % 400 == 0) { daysInMonth = 29 }
-                                } else
-                                    daysInMonth = 29
-                            } else
-                                daysInMonth = 28
-                        }
-                    }
+                    // leap year check
+                    "2" -> daysInMonth = if(y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
+                }
                 var newday = day.toInt()
                 var newmonth = month.toInt()
                 for(i in 0..7) {
