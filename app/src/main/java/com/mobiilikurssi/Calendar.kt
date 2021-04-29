@@ -58,15 +58,11 @@ class Calendar : AppCompatActivity() {
         val time = pref.getString("time", "empty")
 
         val editor = pref.edit()
-
-
         // only add if not nan and positive number
         if(!km.isNaN() && !kcal.isNaN()) {
             if(km > 0 && kcal > 0) {
-                //if(new)
                 var totalkcal = pref.getFloat("totalkcal", 0.0f)
                 var totalkm = pref.getFloat("totalkm", 0.0f)
-
                 totalkm += km
                 totalkcal += kcal
                 editor.putFloat("totalkcal", totalkcal)
@@ -75,6 +71,7 @@ class Calendar : AppCompatActivity() {
             }
         }
 
+        // more preferences
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
 

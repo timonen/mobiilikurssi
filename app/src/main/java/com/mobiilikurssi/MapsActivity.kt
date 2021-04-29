@@ -134,7 +134,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
     }
-    // back to float
+
     private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Float {
         return ((duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)).toFloat()
     }
