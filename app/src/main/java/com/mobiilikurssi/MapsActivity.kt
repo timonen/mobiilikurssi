@@ -23,6 +23,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -62,26 +63,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
         var startButton : TextView = findViewById(R.id.button_start)
         startButton.setOnClickListener {
             toggleStartButton()
             tracker.toggleTrack()
         }
 
+        tracker.onSanitizing = {
+            val btn = findViewById<Button>(R.id.button_start)
+            btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegray))
+            btn.text = "Valmistellaan sijaintia"
+        }
+
         tracker.onStartTracking = {
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
-            var toggleTrack : TextView = btn
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.mapred))
-            toggleTrack.text = "Lopeta seuranta"
+            btn.text = "Lopeta seuranta"
         }
 
         tracker.onEndTracking = {
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
-            var toggleTrack : TextView = btn
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegreen))
-            toggleTrack.text = "Aloita liikkuminen"
+            btn.text = "Aloita liikkuminen"
 
             var processed = 0
             var previousLocation : Location? = null
@@ -113,7 +120,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         tracker.onNewLocation = { count ->
             val t : TextView = findViewById(R.id.textView)
-            t.text = "count $count total ${tracker.getTotalMeters()} km ${tracker.getLastLocation()}"
+            val l = tracker.getLastLocation()
+            t.text = "count $count total ${tracker.getTotalMeters()} km ${l.latitude} ${l.longitude}"
+
+            val position = LatLng(l.latitude, l.longitude)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 17.0f));
         }
 
         findViewById<Button>(R.id.button_settings).setOnClickListener {
