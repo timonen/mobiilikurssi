@@ -59,11 +59,13 @@ class Calendar : AppCompatActivity() {
 
         val editor = pref.edit()
 
-        var totalkm = 0.0f
-        var totalkcal = 0.0f
+
         // only add if not nan and positive number
         if(!km.isNaN() && !kcal.isNaN()) {
             if(km > 0 && kcal > 0) {
+                var totalkcal = pref.getFloat("totalkcal", 0.0f)
+                var totalkm = pref.getFloat("totalkm", 0.0f)
+
                 totalkm += km
                 totalkcal += kcal
                 editor.putFloat("totalkcal", totalkcal)
