@@ -54,8 +54,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.i("test", "Now $state}")
 
         when(state) {
-            false -> startButton.background.alpha = 128
-            true -> startButton.background.alpha = 255
+            false -> startButton.alpha = 0.5f
+            true -> startButton.alpha = 1.0f
         }
 
         startButton.isClickable = state
