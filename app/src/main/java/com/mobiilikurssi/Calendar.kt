@@ -6,9 +6,11 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
@@ -154,8 +156,16 @@ class Calendar : AppCompatActivity() {
         }
     }
     // regex for replacing zero in front of number
+
     private fun removeZero(str : String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
     }
+
+    fun calendarClick() {
+        calendarView = findViewById(R.id.calendarView)
+        val selectedDate: Long = calendarView.date
+        Log.i("test", "$selectedDate");
+    }
+
 }
