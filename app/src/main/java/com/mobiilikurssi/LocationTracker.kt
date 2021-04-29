@@ -18,12 +18,32 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private var permissionGranted : Boolean = false
 
     private val locations : MutableList <Pair<Location,Long>> = ArrayList()
-    private var startTime : Long = 0
-    private var totalDistance = 0.0f;
 
+    private var failsafeStart : Long = 0
+    private var startTime : Long = 0
+
+    private var totalDistance = 0.0f;
     private var tracking = false;
 
     override fun onLocationChanged(location : Location) {
+        //  If this is the first location, do preparation
+        if(locations.count() == 0) {
+            if(failsafeStart == 0L) {
+                onSanitizing?.invoke()
+                failsafeStart = System.currentTimeMillis()
+            }
+
+            /*  Since some phones may give random positions before any
+                sane locations, wait for a bit after the first location */
+            val currentTime  = System.currentTimeMillis()
+            if(currentTime - failsafeStart < 3000)
+                return
+
+            //  Start tracking
+            startTime = currentTime
+            onStartTracking?.invoke()
+        }
+
         val newTime = System.currentTimeMillis()
 
         if(locations.count() >= 1) {
@@ -48,6 +68,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     var onNewLocation : ((locationCount : Int) -> Unit)? = null
     var onStartTracking : (() -> Unit)? = null
     var onEndTracking : (() -> Unit)? = null
+    var onSanitizing : (() -> Unit)? = null
 
     init {
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -68,10 +89,9 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             if (permissionGranted) {
                 locations.clear()
                 totalDistance = 0.0f
+                failsafeStart = 0
 
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
-                onStartTracking?.invoke()
-                startTime = System.currentTimeMillis()
             }
         }
 
@@ -81,10 +101,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
     }
 
-    fun getLastLocation() : String {
-        val location = locations.last().first
-        return "${location.latitude} : ${location.longitude}"
-    }
+    fun getLastLocation() : Location = locations.last().first
 
     fun getDurationSeconds() : Long {
         if(!tracking)
