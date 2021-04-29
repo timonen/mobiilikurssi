@@ -133,13 +133,14 @@ class Calendar : AppCompatActivity() {
                 var newday = day.toInt()
                 var newmonth = month.toInt()
                 for(i in 0..7) {
-                                if(newday < daysInMonth){
-                                    newday += 1
-                                } else {
-                                    newday = 1
-                                    newmonth += 1
-                                }
+                    when {
+                        newday > daysInMonth -> newday++
+                        else -> {
+                            newday = 1
+                            newmonth++
+                        }
                     }
+                }
                 myDate.text = "$day.$month.$year - $newday.$newmonth.$year"
             }
             "kuukausi" -> {
