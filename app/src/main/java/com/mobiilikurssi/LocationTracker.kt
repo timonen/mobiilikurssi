@@ -19,31 +19,21 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
     private val locations : MutableList <Pair<Location,Long>> = ArrayList()
 
-    private var failsafeDone = false
     private var startTime : Long = 0
-
     private var totalDistance = 0.0f;
     private var tracking = false;
 
+    @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
-        /*  Since some phones have a bad GPS, the first location(s)
-            might be far off. To prevent this we sleep for a bit */
-        if(!failsafeDone) {
-            onSanitizing?.invoke()
-            Thread.sleep(3000)
-
-            //  Start tracking
-            startTime = System.currentTimeMillis()
+        if(locations.count() == 0) {
             onStartTracking?.invoke()
-
-            failsafeDone = true
-            return
+            startTime = System.currentTimeMillis()
         }
 
         val newTime = System.currentTimeMillis()
 
         if(locations.count() >= 1) {
-            val locationDelta = location.distanceTo(locations.last().first)
+            var locationDelta = location.distanceTo(locations.last().first)
             totalDistance += locationDelta;
         }
 
@@ -64,7 +54,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     var onNewLocation : ((locationCount : Int) -> Unit)? = null
     var onStartTracking : (() -> Unit)? = null
     var onEndTracking : (() -> Unit)? = null
-    var onSanitizing : (() -> Unit)? = null
 
     init {
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -85,7 +74,6 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             if (permissionGranted) {
                 locations.clear()
                 totalDistance = 0.0f
-                failsafeDone = false
 
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
             }

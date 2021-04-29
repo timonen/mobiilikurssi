@@ -71,12 +71,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             tracker.toggleTrack()
         }
 
-        tracker.onSanitizing = {
-            val btn = findViewById<Button>(R.id.button_start)
-            btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegray))
-            btn.text = "Valmistellaan sijaintia"
-        }
-
         tracker.onStartTracking = {
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
