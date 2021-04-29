@@ -133,13 +133,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         findViewById<Button>(R.id.button_history).setOnClickListener {
             val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-            val weight = pref.getString("weight", "empty")?.toInt()
+            val weight = pref.getString("weight", "empty")
 
             val intent = Intent(this, Calendar::class.java).apply {
                 putExtra("totalkm", tracker.getTotalKilometers())
                 if(weight != null) {
                     val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
-                    putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight))
+                    if(weight != "empty") {
+                        putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
+                    }
                 }
             }
             startActivity(intent)

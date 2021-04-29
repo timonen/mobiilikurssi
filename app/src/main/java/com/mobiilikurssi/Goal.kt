@@ -50,15 +50,12 @@ class Goal : AppCompatActivity() {
             editor.putFloat("totalkm", 0.0f)
             editor.apply()
             Toast.makeText(applicationContext, "Tavoite asetettu", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(applicationContext, Calendar::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        intent.putExtra("EXIT", true)
-        startActivity(intent)
+            val intent = Intent(applicationContext, Calendar::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.putExtra("EXIT", true)
+            startActivity(intent)
+        }
     }
 
     private fun createSpinner(list: Array<String>, place: LinearLayout){
