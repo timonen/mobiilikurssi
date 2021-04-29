@@ -54,8 +54,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.i("test", "Now $state}")
 
         when(state) {
-            false -> startButton.background.alpha = 128
-            true -> startButton.background.alpha = 255
+            false -> startButton.alpha = 0.5f
+            true -> startButton.alpha = 1.0f
         }
 
         startButton.isClickable = state
@@ -134,7 +134,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
     }
-    // back to float
+
     private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Float {
         return ((duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)).toFloat()
     }
