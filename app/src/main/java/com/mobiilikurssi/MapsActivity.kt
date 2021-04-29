@@ -71,12 +71,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             tracker.toggleTrack()
         }
 
-        tracker.onSanitizing = {
-            val btn = findViewById<Button>(R.id.button_start)
-            btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegray))
-            btn.text = "Valmistellaan sijaintia"
-        }
-
         tracker.onStartTracking = {
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
@@ -141,6 +135,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
                     if(weight != "empty") {
                         putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
+                    } else {
+                        putExtra("weightset", false)
                     }
                 }
             }

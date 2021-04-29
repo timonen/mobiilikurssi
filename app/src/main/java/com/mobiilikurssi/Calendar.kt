@@ -36,6 +36,7 @@ class Calendar : AppCompatActivity() {
 
         val km = intent.getFloatExtra("totalkm", 0.0f)
         val kcal = intent.getFloatExtra("totalkcal", 0.0f)
+        val weightset = intent.getBooleanExtra("weightset", true)
 
         // textViews by default
         val goals = findViewById<TextView>(R.id.textview_goals).apply {
@@ -95,24 +96,34 @@ class Calendar : AppCompatActivity() {
             "kilometri" -> gU = "kilometriä"
             "kilogramma" -> gU = "kilogrammaa"
         }
-        goals.text = "Tavoite: $getAmount $gU / $getTime"
+
+        if(getAmount != "empty" && getTime != "empty") {
+            goals.text = "Tavoite: $getAmount $gU / $getTime"
+        } else {
+            goals.text = "Ei uusia tavoitteita"
+        }
 
         when(getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
-                        completed.text = "Tavoitteesta suoritettu %.2f".format(pref.getFloat("totalkm", 0.0f)) + " km / $getAmount km"
+                        completed.text = "Suoritettu %.2f".format(pref.getFloat("totalkm", 0.0f)) + " km / $getAmount km"
                 }
             }
             "kilogramma" -> {
                 if(startingweight != "empty") {
                     completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
                 } else {
-                    completed.text = "Aseta oma painosi asetuksissa niin näät tavoitepainosi tavoiteajan kuluttua"
+                    completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
                 }
             }
             "kalori" -> {
                 if (getAmount != null) {
-                        completed.text = "Tavoitteesta suoritettu  %.2f".format(pref.getFloat("totalkcal", 0.0f)) + " kcal / $getAmount kcal"
+                    if(weightset) {
+                        completed.text = "Suoritettu  %.2f".format(pref.getFloat("totalkcal", 0.0f)) + " kcal / $getAmount kcal"
+                    } else {
+                        completed.text = "Aseta painosi asetuksissa niin näet kaloreiden kulutuksen"
+                    }
+
                 }
             }
         }
