@@ -54,8 +54,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.i("test", "Now $state}")
 
         when(state) {
-            false -> startButton.background.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
-            true -> startButton.background.clearColorFilter()
+            false -> startButton.background.alpha = 128
+            true -> startButton.background.alpha = 255
         }
 
         startButton.isClickable = state
@@ -134,8 +134,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
     }
-
-    private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Double {
-        return (duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)
+    // back to float
+    private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Float {
+        return ((duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)).toFloat()
     }
 }

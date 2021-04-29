@@ -24,7 +24,7 @@ class Calendar : AppCompatActivity() {
 
         // if from Goal go back to MapsActivity
         if (intent.getBooleanExtra("EXIT", false)) {
-            finish();
+            finish()
         }
 
         setContentView(R.layout.activity_calendar)
@@ -32,9 +32,8 @@ class Calendar : AppCompatActivity() {
         //TODO show dates in calendar
         calendarView = findViewById(R.id.calendarView)
 
-        // format these values
-        val totalkm = intent.getFloatExtra("totalkm", 0.0f)
-        val totalkcal = intent.getDoubleExtra("totalkcal", 0.0)
+        val km = intent.getFloatExtra("totalkm", 0.0f)
+        val kcal = intent.getFloatExtra("totalkcal", 0.0f)
 
         // textViews by default
         val goals = findViewById<TextView>(R.id.textview_goals).apply {
@@ -50,12 +49,31 @@ class Calendar : AppCompatActivity() {
         findViewById<Button>(R.id.button_goals).setOnClickListener {
             startActivity(Intent(this, Goal::class.java))
         }
+
         // getting preferences
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
         val getTime = pref.getString("päivä", "empty")
         val getUnit = pref.getString("kalori", "empty")
         val getAmount = pref.getString("amount", "empty")
         val time = pref.getString("time", "empty")
+
+        val editor = pref.edit()
+
+
+        // only add if not nan and positive number
+        if(!km.isNaN() && !kcal.isNaN()) {
+            if(km > 0 && kcal > 0) {
+                //if(new)
+                var totalkcal = pref.getFloat("totalkcal", 0.0f)
+                var totalkm = pref.getFloat("totalkm", 0.0f)
+
+                totalkm += km
+                totalkcal += kcal
+                editor.putFloat("totalkcal", totalkcal)
+                editor.putFloat("totalkm", totalkm)
+                editor.apply()
+            }
+        }
 
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
@@ -83,7 +101,7 @@ class Calendar : AppCompatActivity() {
         when(getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
-                        completed.text = "Tavoitteesta suoritettu %.2f".format(totalkm) + " km / $getAmount km"
+                        completed.text = "Tavoitteesta suoritettu %.2f".format(pref.getFloat("totalkm", 0.0f)) + " km / $getAmount km"
                 }
             }
             "kilogramma" -> {
@@ -95,7 +113,7 @@ class Calendar : AppCompatActivity() {
             }
             "kalori" -> {
                 if (getAmount != null) {
-                        completed.text = "Tavoitteesta suoritettu  %.2f".format(totalkcal) + " kcal / $getAmount kcal"
+                        completed.text = "Tavoitteesta suoritettu  %.2f".format(pref.getFloat("totalkcal", 0.0f)) + " kcal / $getAmount kcal"
                 }
             }
         }
