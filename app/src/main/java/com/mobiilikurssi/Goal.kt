@@ -45,6 +45,9 @@ class Goal : AppCompatActivity() {
             // sending preferences
             editor.putString("amount", amount.text.toString())
             editor.putString("time", time)
+            // starting off fresh values
+            editor.putFloat("totalkcal", 0.0f)
+            editor.putFloat("totalkm", 0.0f)
             editor.apply()
             Toast.makeText(applicationContext, "Tavoite asetettu", Toast.LENGTH_SHORT).show()
         }

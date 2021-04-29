@@ -24,7 +24,7 @@ class Calendar : AppCompatActivity() {
 
         // if from Goal go back to MapsActivity
         if (intent.getBooleanExtra("EXIT", false)) {
-            finish();
+            finish()
         }
 
         setContentView(R.layout.activity_calendar)
@@ -63,6 +63,7 @@ class Calendar : AppCompatActivity() {
         // only add if not nan and positive number
         if(!km.isNaN() && !kcal.isNaN()) {
             if(km > 0 && kcal > 0) {
+                //if(new)
                 var totalkcal = pref.getFloat("totalkcal", 0.0f)
                 var totalkm = pref.getFloat("totalkm", 0.0f)
 
