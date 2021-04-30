@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
  * TODO write docs
  * Calendar class
  * @author
- * @version 1.1
+ * @version 1.2
  */
 class Calendar : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
@@ -147,10 +147,11 @@ class Calendar : AppCompatActivity() {
         }
 
         /** settings text (starting time - ending time) */
+        val myG = "Tavoiteaika: "
         when(getTime) {
             "päivä" -> {
                 val newday = day.toInt().plus(1)
-                myDate.text = "$day.$month.$year - $newday.$month.$year"
+                myDate.text = "$myG$day.$month.$year - $newday.$month.$year"
             }
             "viikko" -> {
                 var daysInMonth = 0
@@ -171,15 +172,15 @@ class Calendar : AppCompatActivity() {
                         newmonth += 1
                     }
                 }
-                myDate.text = "$day.$month.$year - $newday.$newmonth.$year"
+                myDate.text = "$myG$day.$month.$year - $newday.$newmonth.$year"
             }
             "kuukausi" -> {
                 val newmonth = month.toInt().plus(1)
-                myDate.text = "$day.$month.$year - $day.$newmonth.$year"
+                myDate.text = "$myG$day.$month.$year - $day.$newmonth.$year"
             }
             "vuosi" -> {
                 val newyear = year.toInt().plus(1)
-                myDate.text = "$day.$month.$year - $day.$month.$newyear"
+                myDate.text = "$myG$day.$month.$year - $day.$month.$newyear"
             }
         }
     }

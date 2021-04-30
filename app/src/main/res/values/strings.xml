@@ -10,12 +10,13 @@
     <string name="string_calendar">Kalenteri</string>
     <string name="string_goals">Ei uusia tavoitteita</string>
     <string name="button_goals">Uusi tavoite</string>
+    <string name="string_day">Päivä</string>
 
 
     <!--Settings -->
     <string name="string_profile">Luo profiili</string>
-    <string name="string_length">Pituus(cm)</string>
-    <string name="string_weight">Paino(kg)</string>
+    <string name="string_length">Pituus (cm)</string>
+    <string name="string_weight">Paino (kg)</string>
     <string name="string_create">Tallenna</string>
 
 
@@ -23,7 +24,7 @@
     <string name="string_time">Aika</string>
     <string name="string_unit">Yksikkö</string>
     <string name="string_amount">Määrä</string>
-    <string name="string_send">Lähetä</string>
+    <string name="string_send">Luo tavoite</string>
 
 
 
