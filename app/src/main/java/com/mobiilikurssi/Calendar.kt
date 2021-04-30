@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
  * TODO write docs
  * Calendar class
  * @author
- * @version 1.0
+ * @version 1.1
  */
 class Calendar : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
@@ -43,6 +43,7 @@ class Calendar : AppCompatActivity() {
         //TODO show dates in calendar
         calendarView = findViewById(R.id.calendarView)
 
+        // get intent
         val km = intent.getFloatExtra("totalkm", 0.0f)
         val kcal = intent.getFloatExtra("totalkcal", 0.0f)
         val weightset = intent.getBooleanExtra("weightset", true)
@@ -71,19 +72,18 @@ class Calendar : AppCompatActivity() {
 
         val editor = pref.edit()
         // only add if not nan and positive number
-        if(!km.isNaN() && !kcal.isNaN()) {
-            if(km > 0 && kcal > 0) {
-                var totalkcal = pref.getFloat("totalkcal", 0.0f)
-                var totalkm = pref.getFloat("totalkm", 0.0f)
-                totalkm += km
-                totalkcal += kcal
-                editor.putFloat("totalkcal", totalkcal)
-                editor.putFloat("totalkm", totalkm)
-                editor.apply()
-            }
+        if((!km.isNaN() && !kcal.isNaN()) && (km > 0 && kcal > 0)) {
+            var totalkcal = pref.getFloat("totalkcal", 0.0f)
+            var totalkm = pref.getFloat("totalkm", 0.0f)
+            totalkm += km
+            totalkcal += kcal
+            editor.putFloat("totalkcal", totalkcal)
+            editor.putFloat("totalkm", totalkm)
+            editor.apply()
         }
 
-        // more preferences
+
+        // user preferences
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
 
@@ -112,10 +112,16 @@ class Calendar : AppCompatActivity() {
             goals.text = "Ei uusia tavoitteita"
         }
 
+        /** logic for different units*/
         when(getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
-                        completed.text = "Suoritettu %.2f".format(pref.getFloat("totalkm", 0.0f)) + " km / $getAmount km"
+                    val amount = pref.getFloat("totalkm", 0.0f)
+                    if(amount < getAmount.toInt()) {
+                        completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
+                    } else {
+                        completed.text = "Tavoite suoritettu!"
+                    }
                 }
             }
             "kilogramma" -> {
@@ -128,16 +134,20 @@ class Calendar : AppCompatActivity() {
             "kalori" -> {
                 if (getAmount != null) {
                     if(weightset) {
-                        completed.text = "Suoritettu  %.2f".format(pref.getFloat("totalkcal", 0.0f)) + " kcal / $getAmount kcal"
+                        val amount = pref.getFloat("totalkcal", 0.0f)
+                        if(amount < getAmount.toInt()) {
+                            completed.text = "Suoritettu  %.2f".format(amount) + " kcal / $getAmount kcal"
+                        } else {
+                            completed.text = "Tavoite suoritettu!"
+                        }
                     } else {
                         completed.text = "Aseta painosi asetuksissa niin näet kaloreiden kulutuksen"
                     }
-
                 }
             }
         }
 
-        // settings text (starting time - ending time)
+        /** settings text (starting time - ending time) */
         when(getTime) {
             "päivä" -> {
                 val newday = day.toInt().plus(1)
@@ -149,20 +159,19 @@ class Calendar : AppCompatActivity() {
                 when(month) {
                     "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
                     "4", "6", "9", "11" -> daysInMonth = 30
-                    // leap year check
+                    /** leap year check */
                     "2" -> daysInMonth = if(y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
                 }
                 var newday = day.toInt()
                 var newmonth = month.toInt()
                 for(i in 0..7) {
-                    when {
-                        newday > daysInMonth -> newday++
-                        else -> {
-                            newday = 1
-                            newmonth++
-                        }
+                    if(newday < daysInMonth){
+                        newday += 1
+                    } else {
+                        newday = 1
+                        newmonth += 1
                     }
-                }
+                    }
                 myDate.text = "$day.$month.$year - $newday.$newmonth.$year"
             }
             "kuukausi" -> {
@@ -177,11 +186,12 @@ class Calendar : AppCompatActivity() {
     }
 
     /**
-     * @param str
-     * @return
+     * Regex for replacing zero in front of number
+     * @param str input string
+     * @return replaced string
      */
     private fun removeZero(str : String) : String {
-        val regex = "^0+(?!$)".toRegex() // regex for replacing zero in front of number
+        val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
     }
 

@@ -97,6 +97,8 @@ class Goal : AppCompatActivity() {
              * Function for selecting item
              * @param parent children are list items defined in adapter
              * @param position item's position in a list
+             * @param view
+             * @param id
              */
             override fun onItemSelected(
                     parent: AdapterView<*>,
