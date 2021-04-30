@@ -72,9 +72,9 @@ class Goal : AppCompatActivity() {
     /**
      * Creating a dynamic spinner (drop-down list)
      * @param list Array of options
-     * @param place Location for spinner
+     * @param location LinearLayout element
      */
-    private fun createSpinner(list: Array<String>, place: LinearLayout){
+    private fun createSpinner(list: Array<String>, location: LinearLayout){
         /** creating widget */
         val spinner = Spinner(this)
         spinner.layoutParams = LinearLayout.LayoutParams(
@@ -82,7 +82,7 @@ class Goal : AppCompatActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
         /** adding to layout */
-        place.addView(spinner)
+        location.addView(spinner)
         /** making an adapter */
         val adapter = ArrayAdapter(
                 this,

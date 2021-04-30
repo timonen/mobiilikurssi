@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
  * TODO write docs
  * Calendar class
  * @author
- * @version 1.2
+ * @version 1.3
  */
 class Calendar : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
@@ -48,16 +48,9 @@ class Calendar : AppCompatActivity() {
         val kcal = intent.getFloatExtra("totalkcal", 0.0f)
         val weightset = intent.getBooleanExtra("weightset", true)
 
-        // textViews by default
-        val goals = findViewById<TextView>(R.id.textview_goals).apply {
-            this.text = "Ei uusia tavoitteita"
-        }
-        val myDate = findViewById<TextView>(R.id.textView_date).apply {
-            this.text = ""
-        }
-        val completed = findViewById<TextView>(R.id.textView_completed).apply {
-            this.text = ""
-        }
+        val goals = findViewById<TextView>(R.id.textview_goals)
+        val myDate = findViewById<TextView>(R.id.textView_date)
+        val completed = findViewById<TextView>(R.id.textView_completed)
 
         findViewById<Button>(R.id.button_goals).setOnClickListener {
             startActivity(Intent(this, Goal::class.java))
