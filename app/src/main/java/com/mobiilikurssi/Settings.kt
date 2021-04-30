@@ -10,9 +10,13 @@ import android.widget.*
 import kotlin.math.pow
 
 /**
- * TODO write docs
- * Settings class
- * @author
+ * Settings
+ *
+ * This class takes users height and weight as an input.
+ * Outputs users bmi back to the user.
+ * And saves all the values as preferences.
+ *
+ * @author Valtteri Viirret
  * @version 1.0
  */
 class Settings : AppCompatActivity() {
@@ -27,26 +31,24 @@ class Settings : AppCompatActivity() {
         val weight = findViewById<EditText>(R.id.text_weight)
         val bmiText = findViewById<TextView>(R.id.textView_bmi)
 
-        // find preferences
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-        pref.getString("height", "empty")?.let { Log.d("main", it) }
-        pref.getString("weight", "empty")?.let { Log.d("main", it) }
-        pref.getString("bmi", "empty")?.let { Log.d("main", it) }
-
+        val editor = pref.edit()
 
         findViewById<Button>(R.id.create_button).setOnClickListener {
-            val editor = pref.edit()
             editor.putString("height", height.text.toString())
             editor.putString("weight", weight.text.toString())
 
             val h = height.text.toString().toDouble()
             val w = weight.text.toString().toDouble()
-            val bmi = "%.1f".format(h.div(100).let { w.div(it.pow(2)) })
-            val realbmi = h.div(100).let { w.div(it.pow(2)) }
-            editor.putString("bmi", bmi)
+
+            // bmi and bmi formatted
+            val bmi = h.div(100).let { w.div(it.pow(2)) }
+            val bmiF = "%.1f".format(h.div(100).let { w.div(it.pow(2)) })
+
+            editor.putString("bmi", bmiF)
             editor.apply()
 
-            bmiText.text = bmiSettings(realbmi)
+            bmiText.text = bmiSettings(bmi)
 
             Toast.makeText(applicationContext,"Profiilin tiedot tallennettu",Toast.LENGTH_SHORT).show()
         }
