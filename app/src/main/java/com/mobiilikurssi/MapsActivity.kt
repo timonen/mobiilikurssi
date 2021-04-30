@@ -1,14 +1,5 @@
 package com.mobiilikurssi
-/*
-FORMULA FOR CALORIECOUNTER:
-https://www.verywellfit.com/how-many-calories-you-burn-during-exercise-4111064
-Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
 
-MET (metabolic equivalent for task)
-Since this is not an medical application we feel comfortable
-using formula: 1 km/h = 1.1 MET
-https://metscalculator.com/
- */
 import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
@@ -156,7 +147,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * Calculates total calories
+     * This function calculates total calories
+     * Since this is not an medical application we feel comfortable using formula:
+     * Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
+     *
+     * @see <a href="https://www.verywellfit.com/how-many-calories-you-burn-during-exercise-4111064">
+     *     https://www.verywellfit.com/how-many-calories-you-burn-during-exercise</a>
+     *
+     * MET (metabolic equivalent for task)
+     * Formula: 1 km/h average speed = 1.1 MET
+     * @see <a href="https://metscalculator.com/">https://metscalculator.com</a>
+     *
      * @param duration
      * @param avgSpeed
      * @param weight

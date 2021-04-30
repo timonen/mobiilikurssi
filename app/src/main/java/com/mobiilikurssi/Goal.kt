@@ -96,7 +96,7 @@ class Goal : AppCompatActivity() {
             /**
              * Function for selecting item
              * @param parent children are list items defined in adapter
-             * @param position item's position in a list
+             * @param position
              * @param view
              * @param id
              */
@@ -104,7 +104,6 @@ class Goal : AppCompatActivity() {
                     parent: AdapterView<*>,
                     view: View, position: Int, id: Long
             ) {
-
                 val pref: SharedPreferences = getSharedPreferences("GOAL", MODE_PRIVATE)
                 val editor = pref.edit()
                 /**
