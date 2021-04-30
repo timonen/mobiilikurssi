@@ -15,8 +15,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * TODO
- *
+ * TODO write docs
+ * Calendar class
+ * @author
+ * @version 1.0
  */
 class Calendar : AppCompatActivity() {
     private lateinit var calendarView: CalendarView

@@ -13,6 +13,12 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
+/**
+ * TODO write docs
+ * Location tracked class
+ * @author
+ * @version 1.0
+ */
 class LocationTracker(private val ctx : Context) : LocationListener {
     private var locationManager : LocationManager? = null
     private var permissionGranted : Boolean = false
@@ -23,6 +29,9 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private var totalDistance = 0.0f;
     private var tracking = false;
 
+    /**
+     * @param location
+     */
     @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
         if(locations.count() == 0) {
@@ -42,6 +51,10 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         onNewLocation?.invoke(locations.count())
     }
 
+    /**
+     *
+     * @param callback
+     */
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
         var lastTime = startTime
 
@@ -65,6 +78,10 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
     }
 
+    /**
+     * TODO
+     *
+     */
     @SuppressLint("MissingPermission")
     fun toggleTrack() {
         //  Toggle from true -> false or false -> true
@@ -85,8 +102,14 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
     }
 
+    /**
+     * @return
+     */
     fun getLastLocation() : Location = locations.last().first
 
+    /**
+     * @return
+     */
     fun getDurationSeconds() : Long {
         if(!tracking)
             return 0
@@ -95,6 +118,9 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         return (newTime - startTime) / 1000
     }
 
+    /**
+     * @return
+     */
     fun getDurationMinutes() : Double = getDurationSeconds().toDouble() / 60
 
     fun getTotalMeters() = totalDistance

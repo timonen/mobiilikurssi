@@ -31,12 +31,20 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 
-
+/**
+ * TODO write docs
+ * Map activity class
+ * @author
+ * @version 1.0
+ */
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private val tracker by lazy { LocationTracker(this) }
 
+    /**
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2)
@@ -62,6 +70,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         startButton.isClickable = state
     }
 
+    /**
+     * @param googleMap
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -144,6 +155,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Calculates total calories
+     * @param duration
+     * @param avgSpeed
+     * @param weight
+     * @return Float
+     */
     private fun getTotalCalories(duration: Double, avgSpeed: Double, weight: Int) : Float {
         return ((duration * ((avgSpeed * 1.1) * 3.5 * weight)).div(200)).toFloat()
     }

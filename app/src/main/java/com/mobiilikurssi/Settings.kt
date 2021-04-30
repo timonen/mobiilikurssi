@@ -9,8 +9,16 @@ import android.view.View
 import android.widget.*
 import kotlin.math.pow
 
+/**
+ * TODO write docs
+ * Settings class
+ * @author
+ * @version 1.0
+ */
 class Settings : AppCompatActivity() {
-
+    /**
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_settings)
@@ -44,7 +52,10 @@ class Settings : AppCompatActivity() {
         }
     }
 
-    //return a description of weight based on bmi
+    /**
+     * @param bmi
+     * @return a description of weight based on bmi
+     */
     private fun bmiSettings(bmi: Double): String {
         return when(bmi) {
             in 0.0..18.5 -> "Olet alipainoinen"
