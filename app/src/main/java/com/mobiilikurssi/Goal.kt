@@ -41,7 +41,7 @@ class Goal : AppCompatActivity() {
 
         /**
          * Setting up a "timestamp" for current goal.
-         * Formatted as a finnish date
+         * Formatted as a Finnish date
          */
         val currentDateTime = LocalDateTime.now()
         val calendar = java.util.Calendar.getInstance()
@@ -104,12 +104,9 @@ class Goal : AppCompatActivity() {
                     parent: AdapterView<*>,
                     view: View, position: Int, id: Long
             ) {
-                /** setting the selected item */
-                spinner.setSelection(position)
 
                 val pref: SharedPreferences = getSharedPreferences("GOAL", MODE_PRIVATE)
                 val editor = pref.edit()
-
                 /**
                  * Key is the first item in the list used as a parameter
                  * Value is the selected item as a string
@@ -117,10 +114,7 @@ class Goal : AppCompatActivity() {
                 editor.putString(list[0], spinner.selectedItem.toString())
                 editor.apply()
             }
-            /**
-             * Must be implemented because listener is abstract.
-             * Selecting nothing will already implement the first item in the list.
-             */
+            /** Must be implemented because listener is abstract. */
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }

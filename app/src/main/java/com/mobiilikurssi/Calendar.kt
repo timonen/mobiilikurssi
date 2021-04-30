@@ -82,7 +82,6 @@ class Calendar : AppCompatActivity() {
             editor.apply()
         }
 
-
         // user preferences
         val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val startingweight = prefSettings.getString("weight", "empty")
@@ -164,14 +163,14 @@ class Calendar : AppCompatActivity() {
                 }
                 var newday = day.toInt()
                 var newmonth = month.toInt()
-                for(i in 0..7) {
+                for(i in 1..7) {
                     if(newday < daysInMonth){
                         newday += 1
                     } else {
                         newday = 1
                         newmonth += 1
                     }
-                    }
+                }
                 myDate.text = "$day.$month.$year - $newday.$newmonth.$year"
             }
             "kuukausi" -> {
@@ -200,10 +199,13 @@ class Calendar : AppCompatActivity() {
      * TODO make it work
      * @param view
      */
+
     fun calendarClick(view: View) {
         calendarView = findViewById(R.id.calendarView)
         val selectedDate: Long = calendarView.date
         Log.i("test", "$selectedDate");
     }
+
+
 
 }
