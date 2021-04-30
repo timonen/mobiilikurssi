@@ -14,11 +14,18 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
-
+/**
+ * TODO
+ *
+ */
 class Calendar : AppCompatActivity() {
-
     private lateinit var calendarView: CalendarView
 
+    /**
+     * TODO
+     *
+     * @param savedInstanceState
+     */
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -166,14 +173,22 @@ class Calendar : AppCompatActivity() {
             }
         }
     }
-    // regex for replacing zero in front of number
 
+    /**
+     * @param str
+     * @return
+     */
     private fun removeZero(str : String) : String {
-        val regex = "^0+(?!$)".toRegex()
+        val regex = "^0+(?!$)".toRegex() // regex for replacing zero in front of number
         return regex.replace(str, "")
     }
 
-    fun calendarClick() {
+    /**
+     * Will be used with calendar
+     * TODO make it work
+     * @param view
+     */
+    fun calendarClick(view: View) {
         calendarView = findViewById(R.id.calendarView)
         val selectedDate: Long = calendarView.date
         Log.i("test", "$selectedDate");
