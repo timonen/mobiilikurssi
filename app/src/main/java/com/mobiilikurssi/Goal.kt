@@ -20,7 +20,7 @@ import java.time.LocalDateTime
  */
 class Goal : AppCompatActivity() {
 
-    /** Arrays for different time and unit settings */
+    // Arrays for different time and unit settings
     private val timeArray = arrayOf<String>("päivä", "viikko", "kuukausi", "vuosi")
     private val unitArray = arrayOf<String>("kalori", "kilometri", "kilogramma")
 
@@ -35,14 +35,12 @@ class Goal : AppCompatActivity() {
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
         val editor = pref.edit()
 
-        /**making spinners by calling function */
+        // making spinners by calling function
         createSpinner(timeArray, layout1)
         createSpinner(unitArray, layout2)
 
-        /**
-         * Setting up a "timestamp" for current goal.
-         * Formatted as a Finnish date
-         */
+         // Setting up a "timestamp" for current goal.
+         // Formatted as a Finnish date
         val currentDateTime = LocalDateTime.now()
         val calendar = java.util.Calendar.getInstance()
         val sdf = SimpleDateFormat("dd.MM.yyyy")
@@ -53,7 +51,7 @@ class Goal : AppCompatActivity() {
 
         findViewById<Button>(R.id.send_button).setOnClickListener {
 
-             /** preferences for a goal*/
+             // preferences for a goal
             editor.putString("amount", amount.text.toString())
             editor.putString("time", time)
             editor.putFloat("totalkcal", 0.0f)
@@ -75,22 +73,23 @@ class Goal : AppCompatActivity() {
      * @param location LinearLayout element
      */
     private fun createSpinner(list: Array<String>, location: LinearLayout){
-        /** creating widget */
+        // creating widget
         val spinner = Spinner(this)
         spinner.layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        /** adding to layout */
+        // adding to layout
         location.addView(spinner)
-        /** making an adapter */
+
+        // making an adapter
         val adapter = ArrayAdapter(
                 this,
                 android.R.layout.simple_spinner_item, list
         )
         spinner.adapter = adapter
 
-        /** callback to be invoked when item has been selected*/
+        // callback to be invoked when item has been selected
         spinner.onItemSelectedListener = object :
                 AdapterView.OnItemSelectedListener {
             /**
@@ -106,14 +105,13 @@ class Goal : AppCompatActivity() {
             ) {
                 val pref: SharedPreferences = getSharedPreferences("GOAL", MODE_PRIVATE)
                 val editor = pref.edit()
-                /**
-                 * Key is the first item in the list used as a parameter
-                 * Value is the selected item as a string
-                 */
+
+                 // Key is the first item in the list used as a parameter
+                 // Value is the selected item as a string
                 editor.putString(list[0], spinner.selectedItem.toString())
                 editor.apply()
             }
-            /** Must be implemented because listener is abstract. */
+            // Must be implemented because listener is abstract.
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
