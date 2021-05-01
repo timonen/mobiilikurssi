@@ -12,6 +12,7 @@ import android.widget.CalendarView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.pow
 
 
 /**
@@ -59,35 +60,27 @@ class Target : AppCompatActivity() {
         val time = pref.getString("time", "empty")
         val editor = pref.edit()
 
+        // user preferences
+        val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+        val weight = prefSettings.getString("weight", "empty")
+        val height = prefSettings.getString("height", "empty")
 
-        // input sanitation
+        // input sanitation for weight goal
         if(getUnit == "kilogramma") {
             if (getAmount != null) {
+                val w = getAmount.toInt()
                 when (getTime) {
-                    "päivä" -> {
-                        if (getAmount.toInt() > 1) {
-                            getAmount = "unreal"
-                        }
-                    }
-
-                    "viikko" -> {
-                        if (getAmount.toInt() > 4) {
-                            getAmount = "unreal"
-                        }
-                    }
-                    "kuukausi" -> {
-                        if (getAmount.toInt() > 10) {
-                            getAmount = "unreal"
-                        }
-                    }
+                    "päivä" -> if (w > 1) { getAmount = "unreal" }
+                    "viikko" -> if (w > 4) { getAmount = "unreal" }
+                    "kuukausi" -> if (w > 10) { getAmount = "unreal" }
+                }
+                val goalWeight = weight?.toInt()?.minus(w)
+                val bmi = height!!.toDouble().div(100).let { goalWeight?.div(it.pow(2)) }
+                if(bmi!! < 15.0) {
+                    getAmount = "unreal"
                 }
             }
         }
-
-        // user preferences
-        val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-        val startingweight = prefSettings.getString("weight", "empty")
-
 
         /** Updating Goal preferences from MapsActivity intent  */
         if((!km.isNaN() && !kcal.isNaN()) && (km > 0 && kcal > 0)) {
@@ -119,7 +112,7 @@ class Target : AppCompatActivity() {
             "kilometri" -> gU = "kilometriä"
             "kilogramma" -> gU = "kilogrammaa"
         }
-        if(getAmount != "empty" && getTime != "empty") {
+        if(getAmount != "unreal" && getTime != "empty") {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
         } else
             goals.text = "Ei uusia tavoitteita"
@@ -130,7 +123,7 @@ class Target : AppCompatActivity() {
             "kilometri" -> {
                 if (getAmount != null) {
                     val amount = pref.getFloat("totalkm", 0.0f)
-                    if (amount < getAmount.toInt()) {
+                    if (amount < getAmount.toInt()!!) {
                         completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
                         calculatePercentage(percentage, amount.toDouble(), getAmount.toDouble())
                     } else
@@ -138,9 +131,9 @@ class Target : AppCompatActivity() {
                 }
             }
             "kilogramma" -> {
-                if (startingweight != "empty") {
+                if (weight != "empty") {
                     if (getAmount != "unreal") {
-                        completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
+                        completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { weight?.toInt()?.minus(it) }}kg"
                     } else completed.text = "Tavoitepainosi ei ole realistinen, aseta realistinen tavoite"
                 } else completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
             }
