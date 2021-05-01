@@ -26,11 +26,15 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     private val locations : MutableList <Pair<Location,Long>> = ArrayList()
 
     private var startTime : Long = 0
+    private var elapsedTime : Long = 0
+
     private var totalDistance = 0.0f;
     private var tracking = false;
 
     /**
-     * @param location
+     * Since LocationTracker inherits from LocationListener, onLocationChanged
+     * is required. Whenever the GPS detects a new location, this function is called
+     * @param location The new location
      */
     @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
@@ -39,7 +43,8 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             startTime = System.currentTimeMillis()
         }
 
-        val newTime = System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
+        elapsedTime = currentTime - startTime
 
         if(locations.count() >= 1) {
             var locationDelta = location.distanceTo(locations.last().first)
@@ -47,13 +52,15 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
 
         //  Add the location and call the user callback
-        locations.add(Pair(location, newTime))
+        locations.add(Pair(location, currentTime))
         onNewLocation?.invoke(locations.count())
     }
 
     /**
-     *
-     * @param callback
+     * This function exists to eliminate the need for count and
+     * location and index getter. It's used to perform some
+     * action for each location
+     * @param callback What happens for each location
      */
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
         var lastTime = startTime
@@ -64,8 +71,17 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         }
     }
 
+    /**
+     *  onNewLocation is a callback that's called when there's a new location.
+     */
     var onNewLocation : ((locationCount : Int) -> Unit)? = null
+
+    /**
+     *  onStartTracking is a callback that's called when tracking has started. */
     var onStartTracking : (() -> Unit)? = null
+
+    /**
+     *  onEndTracking is a callback that's called when tracking has ended. */
     var onEndTracking : (() -> Unit)? = null
 
     init {
@@ -79,8 +95,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     }
 
     /**
-     * TODO
-     *
+     *  This function toggles the state of the tracker
      */
     @SuppressLint("MissingPermission")
     fun toggleTrack() {
@@ -91,6 +106,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             if (permissionGranted) {
                 locations.clear()
                 totalDistance = 0.0f
+                elapsedTime = 0
 
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
             }
@@ -103,26 +119,29 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     }
 
     /**
-     * @return
+     * @return The most recent location
      */
     fun getLastLocation() : Location = locations.last().first
 
     /**
-     * @return
+     * @return Duration since tracker start in seconds. Returns 0 if tracker is disabled
      */
     fun getDurationSeconds() : Long {
-        if(!tracking)
-            return 0
-
-        val newTime = System.currentTimeMillis()
-        return (newTime - startTime) / 1000
+        return elapsedTime / 1000
     }
 
     /**
-     * @return
+     * @return Duration since tracker start in minutes. Returns 0 if tracker is disabled
      */
     fun getDurationMinutes() : Double = getDurationSeconds().toDouble() / 60
 
+    /**
+     * @return Total meters tracked. Returns
+     */
     fun getTotalMeters() = totalDistance
+
+    /**
+     * @return Duration since tracker start in minutes.
+     */
     fun getTotalKilometers() = totalDistance / 1000
 }
