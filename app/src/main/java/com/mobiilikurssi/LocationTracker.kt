@@ -38,14 +38,17 @@ class LocationTracker(private val ctx : Context) : LocationListener {
      */
     @SuppressLint("MissingPermission")
     override fun onLocationChanged(location : Location) {
+        //  If this is the first location, do preparation
         if(locations.count() == 0) {
             onStartTracking?.invoke()
             startTime = System.currentTimeMillis()
         }
 
+        //  Track the elapsed time
         val currentTime = System.currentTimeMillis()
         elapsedTime = currentTime - startTime
 
+        //  When there's at least 1 location, add to the total distance
         if(locations.count() >= 1) {
             var locationDelta = location.distanceTo(locations.last().first)
             totalDistance += locationDelta;
@@ -58,13 +61,14 @@ class LocationTracker(private val ctx : Context) : LocationListener {
 
     /**
      * This function exists to eliminate the need for count and
-     * location and index getter. It's used to perform some
+     * location at index getters. It's used to perform some
      * action for each location
      * @param callback What happens for each location
      */
     fun forEachLocation(callback : (location : Location, timeDiff : Long) -> Unit) {
         var lastTime = startTime
 
+        //  Call the callback for each location
         for(entry in locations) {
             callback.invoke(entry.first, entry.second - lastTime)
             lastTime = entry.second
@@ -85,8 +89,10 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     var onEndTracking : (() -> Unit)? = null
 
     init {
+        //  Get the location manager service
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
 
+        //  Make sure that we have permissions
         permissionGranted = ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         if (!permissionGranted) {
             Log.i("test", "Request perms");
@@ -102,6 +108,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
         //  Toggle from true -> false or false -> true
         tracking = !tracking
 
+        //  If the tracker should track and we have permissions, reset and request location
         if(tracking) {
             if (permissionGranted) {
                 locations.clear()
@@ -112,6 +119,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             }
         }
 
+        //  If the tracker shouldn't track stop tracking
         else {
             locationManager?.removeUpdates(this)
             onEndTracking?.invoke()
@@ -126,9 +134,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     /**
      * @return Duration since tracker start in seconds. Returns 0 if tracker is disabled
      */
-    fun getDurationSeconds() : Long {
-        return elapsedTime / 1000
-    }
+    fun getDurationSeconds() = elapsedTime / 1000
 
     /**
      * @return Duration since tracker start in minutes. Returns 0 if tracker is disabled
@@ -136,12 +142,12 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     fun getDurationMinutes() : Double = getDurationSeconds().toDouble() / 60
 
     /**
-     * @return Total meters tracked. Returns
+     * @return Total meters tracked.
      */
     fun getTotalMeters() = totalDistance
 
     /**
-     * @return Duration since tracker start in minutes.
+     * @return Total kilometers tracked
      */
     fun getTotalKilometers() = totalDistance / 1000
 }
