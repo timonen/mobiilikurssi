@@ -112,6 +112,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //  Get average speed by calculating distance / time
             val averageSpeedMS : Float = tracker.getTotalMeters() / (timeSum / 1000)
             Toast.makeText(applicationContext, "Avg $averageSpeedMS Processed $processed", Toast.LENGTH_SHORT).show()
+            setIntentCalendar(true)
         }
 
         tracker.onNewLocation = { count ->
@@ -128,22 +129,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         findViewById<Button>(R.id.button_history).setOnClickListener {
-            val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-            val weight = pref.getString("weight", "empty")
+            setIntentCalendar(false)
+        }
+    }
 
-            val intent = Intent(this, Calendar::class.java).apply {
-                putExtra("totalkm", tracker.getTotalKilometers())
-                if(weight != null) {
-                    val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
-                    if(weight != "empty") {
-                        putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
-                    } else {
-                        putExtra("weightset", false)
-                    }
+    private fun setIntentCalendar(tracking: Boolean) {
+        val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+        val weight = pref.getString("weight", "empty")
+
+        val intent = Intent(this, Calendar::class.java).apply {
+            putExtra("totalkm", tracker.getTotalKilometers())
+            putExtra("addProgression", tracking)
+            if(weight != null) {
+                val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
+                if(weight != "empty") {
+                    putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
+                } else {
+                    putExtra("weightset", false)
                 }
             }
-            startActivity(intent)
         }
+        startActivity(intent)
     }
 
     /**
