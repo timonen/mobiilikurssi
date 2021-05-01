@@ -30,13 +30,19 @@ class Settings : AppCompatActivity() {
         val height = findViewById<EditText>(R.id.text_height)
         val weight = findViewById<EditText>(R.id.text_weight)
         val bmiText = findViewById<TextView>(R.id.textView_bmi)
+        val userMeasure = findViewById<TextView>(R.id.textView_stats)
 
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-        val editor = pref.edit()
+
+        if(pref.getBoolean("measureSet", false)) {
+            userMeasure.text = "Pituutesi: ${pref.getString("height", "e")}cm / Painosi: ${pref.getString("weight", "e")}kg"
+        }
 
         findViewById<Button>(R.id.create_button).setOnClickListener {
+            val editor = pref.edit()
             editor.putString("height", height.text.toString())
             editor.putString("weight", weight.text.toString())
+            editor.putBoolean("measureSet", true)
 
             val h = height.text.toString().toDouble()
             val w = weight.text.toString().toDouble()
