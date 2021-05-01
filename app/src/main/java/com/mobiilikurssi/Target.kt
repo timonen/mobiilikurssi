@@ -10,18 +10,17 @@ import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
+
 /**
  * TODO write docs
- * Calendar class
+ * Target class
  * @author
  * @version 1.3
  */
-class Calendar : AppCompatActivity() {
-    private lateinit var calendarView: CalendarView
+class Target : AppCompatActivity() {
 
     /**
      * TODO
@@ -40,8 +39,6 @@ class Calendar : AppCompatActivity() {
 
         setContentView(R.layout.activity_calendar)
 
-        //TODO show dates in calendar
-        calendarView = findViewById(R.id.calendarView)
 
         // get intent
         val km = intent.getFloatExtra("totalkm", 0.0f)
@@ -137,26 +134,24 @@ class Calendar : AppCompatActivity() {
             "kilometri" -> {
                 if (getAmount != null) {
                     val amount = pref.getFloat("totalkm", 0.0f)
-                    if(amount < getAmount.toInt()) {
+                    if (amount < getAmount.toInt()) {
                         completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
                     } else
                         completed.text = "Tavoite suoritettu!"
                 }
             }
             "kilogramma" -> {
-                if(startingweight != "empty") {
-                    if(getAmount != "unreal") {
+                if (startingweight != "empty") {
+                    if (getAmount != "unreal") {
                         completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
-                    }
-                    else completed.text = "Tavoitepainosi ei ole realistinen, aseta realistinen tavoite"
-                }
-                else completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
+                    } else completed.text = "Tavoitepainosi ei ole realistinen, aseta realistinen tavoite"
+                } else completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
             }
             "kalori" -> {
                 if (getAmount != null) {
-                    if(weightset) {
+                    if (weightset) {
                         val amount = pref.getFloat("totalkcal", 0.0f)
-                        if(amount < getAmount.toInt()) {
+                        if (amount < getAmount.toInt()) {
                             completed.text = "Suoritettu  %.2f".format(amount) + " kcal / $getAmount kcal"
                         } else
                             completed.text = "Tavoite suoritettu!"
@@ -176,20 +171,20 @@ class Calendar : AppCompatActivity() {
             "viikko" -> {
                 var daysInMonth = 0
                 val y = year.toInt()
-                when(month) {
+                when (month) {
                     "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
                     "4", "6", "9", "11" -> daysInMonth = 30
                     /** leap year check */
-                    "2" -> daysInMonth = if(y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
+                    "2" -> daysInMonth = if (y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
                 }
                 var newday = day.toInt()
                 var newmonth = month.toInt()
-                for(i in 1..7) {
-                    if(newday < daysInMonth){
+                for (i in 1..7) {
+                    if (newday < daysInMonth) {
                         newday += 1
                     } else
                         newday = 1
-                        newmonth += 1
+                    newmonth += 1
 
                 }
                 myDate.text = "$myG$day.$month.$year - $newday.$newmonth.$year"
@@ -210,23 +205,10 @@ class Calendar : AppCompatActivity() {
      * @param str input string
      * @return replaced string
      */
-    private fun removeZero(str : String) : String {
+    private fun removeZero(str: String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
     }
 
-    /**
-     * Will be used with calendar
-     * TODO make it work
-     * @param view
-     */
-
-    fun calendarClick(view: View) {
-        calendarView = findViewById(R.id.calendarView)
-        val selectedDate: Long = calendarView.date
-        Log.i("test", "$selectedDate");
-    }
-
-
-
 }
+

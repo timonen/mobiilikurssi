@@ -85,6 +85,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             for(line in lines)
                 line.remove()
 
+            //  Reset the line origin
+            lastLocation = null
+
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.mapred))
