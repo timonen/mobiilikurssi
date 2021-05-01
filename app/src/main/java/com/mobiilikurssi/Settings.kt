@@ -34,6 +34,7 @@ class Settings : AppCompatActivity() {
 
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
 
+        // show weight and height
         if(pref.getBoolean("measureSet", false)) {
             userMeasure.text = "Pituutesi: ${pref.getString("height", "e")}cm / Painosi: ${pref.getString("weight", "e")}kg"
         }

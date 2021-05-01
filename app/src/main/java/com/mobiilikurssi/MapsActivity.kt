@@ -131,20 +131,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun setIntentCalendar(tracking: Boolean) {
+    /**
+     * This function sets Intent for Calendar.
+     * @param update Boolean that handles updating value
+     *
+     */
+    private fun setIntentCalendar(update: Boolean) {
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val weight = pref.getString("weight", "empty")
 
         val intent = Intent(this, Calendar::class.java).apply {
             putExtra("totalkm", tracker.getTotalKilometers())
-            putExtra("addProgression", tracking)
+            putExtra("addProgression", update)
             if(weight != null) {
                 val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
                 if(weight != "empty") {
                     putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
                 } else
                     putExtra("weightset", false)
-
             }
         }
         startActivity(intent)
