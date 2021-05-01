@@ -91,25 +91,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegreen))
             btn.text = "Aloita liikkuminen"
 
-            //var processed = 0
-            //var previousLocation : Location? = null
-
-            //val opt = PolylineOptions()
-            //tracker.forEachLocation { location, timeDiff ->
-            //    if(processed > 0) {
-            //        val prev : Location = previousLocation as Location
-
-            //        //  Connect the locations with lines
-            //        opt.add(LatLng(prev.latitude, prev.longitude),
-            //                LatLng(location.latitude, location.longitude))
-            //                .width(5f)
-            //                .color(Color.RED)
-            //    }
-            //    googleMap.addPolyline(opt)
-            //    previousLocation = location
-            //    processed++
-            //}
-            //  Get average speed by calculating distance / time
+            setIntentCalendar(true)
         }
 
         tracker.onNewLocation = { count ->
