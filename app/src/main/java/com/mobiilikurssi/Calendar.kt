@@ -47,6 +47,7 @@ class Calendar : AppCompatActivity() {
         val km = intent.getFloatExtra("totalkm", 0.0f)
         val kcal = intent.getFloatExtra("totalkcal", 0.0f)
         val weightset = intent.getBooleanExtra("weightset", true)
+        val tracking = intent.getBooleanExtra("addProgression", false)
 
         val goals = findViewById<TextView>(R.id.textview_goals)
         val myDate = findViewById<TextView>(R.id.textView_date)
@@ -96,13 +97,15 @@ class Calendar : AppCompatActivity() {
 
         /** Updating Goal preferences from MapsActivity intent  */
         if((!km.isNaN() && !kcal.isNaN()) && (km > 0 && kcal > 0)) {
-            var totalkcal = pref.getFloat("totalkcal", 0.0f)
-            var totalkm = pref.getFloat("totalkm", 0.0f)
-            totalkm += km
-            totalkcal += kcal
-            editor.putFloat("totalkcal", totalkcal)
-            editor.putFloat("totalkm", totalkm)
-            editor.apply()
+            if(tracking) {
+                var totalkcal = pref.getFloat("totalkcal", 0.0f)
+                var totalkm = pref.getFloat("totalkm", 0.0f)
+                totalkm += km
+                totalkcal += kcal
+                editor.putFloat("totalkcal", totalkcal)
+                editor.putFloat("totalkm", totalkm)
+                editor.apply()
+            }
         }
 
         /** Get values from time */
@@ -125,9 +128,9 @@ class Calendar : AppCompatActivity() {
 
         if(getAmount != "empty" && getTime != "empty") {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
-        } else {
+        } else
             goals.text = "Ei uusia tavoitteita"
-        }
+
 
         /** Logic for different units */
         when(getUnit) {
@@ -184,10 +187,10 @@ class Calendar : AppCompatActivity() {
                 for(i in 1..7) {
                     if(newday < daysInMonth){
                         newday += 1
-                    } else {
+                    } else
                         newday = 1
                         newmonth += 1
-                    }
+
                 }
                 myDate.text = "$myG$day.$month.$year - $newday.$newmonth.$year"
             }

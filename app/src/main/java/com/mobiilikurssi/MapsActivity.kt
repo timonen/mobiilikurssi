@@ -105,12 +105,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //                .width(5f)
             //                .color(Color.RED)
             //    }
-
             //    googleMap.addPolyline(opt)
-
             //    previousLocation = location
             //    processed++
             //}
+            //  Get average speed by calculating distance / time
         }
 
         tracker.onNewLocation = { count ->
@@ -140,22 +139,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         findViewById<Button>(R.id.button_history).setOnClickListener {
-            val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-            val weight = pref.getString("weight", "empty")
-
-            val intent = Intent(this, Calendar::class.java).apply {
-                putExtra("totalkm", tracker.getTotalKilometers())
-                if(weight != null) {
-                    val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
-                    if(weight != "empty") {
-                        putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
-                    } else {
-                        putExtra("weightset", false)
-                    }
-                }
-            }
-            startActivity(intent)
+            setIntentCalendar(false)
         }
+    }
+
+    private fun setIntentCalendar(tracking: Boolean) {
+        val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+        val weight = pref.getString("weight", "empty")
+
+        val intent = Intent(this, Calendar::class.java).apply {
+            putExtra("totalkm", tracker.getTotalKilometers())
+            putExtra("addProgression", tracking)
+            if(weight != null) {
+                val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
+                if(weight != "empty") {
+                    putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
+                } else
+                    putExtra("weightset", false)
+
+            }
+        }
+        startActivity(intent)
     }
 
     /**
