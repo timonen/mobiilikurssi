@@ -128,9 +128,9 @@ class Calendar : AppCompatActivity() {
 
         if(getAmount != "empty" && getTime != "empty") {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
-        } else {
+        } else
             goals.text = "Ei uusia tavoitteita"
-        }
+
 
         /** Logic for different units */
         when(getUnit) {
@@ -187,10 +187,10 @@ class Calendar : AppCompatActivity() {
                 for(i in 1..7) {
                     if(newday < daysInMonth){
                         newday += 1
-                    } else {
+                    } else
                         newday = 1
                         newmonth += 1
-                    }
+
                 }
                 myDate.text = "$myG$day.$month.$year - $newday.$newmonth.$year"
             }

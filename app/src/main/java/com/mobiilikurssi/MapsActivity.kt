@@ -144,9 +144,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
                 if(weight != "empty") {
                     putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
-                } else {
+                } else
                     putExtra("weightset", false)
-                }
+
             }
         }
         startActivity(intent)
