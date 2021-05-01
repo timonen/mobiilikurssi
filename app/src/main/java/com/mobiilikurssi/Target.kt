@@ -15,30 +15,25 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 /**
- * TODO write docs
- * Target class
- * @author
+ * This class shows off the current Goal and its progress
+ * @author Valtteri Viirret
  * @version 1.3
  */
 class Target : AppCompatActivity() {
 
     /**
-     * TODO
-     *
      * @param savedInstanceState
      */
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_calendar)
 
         // if from Goal go back to MapsActivity
         if (intent.getBooleanExtra("EXIT", false)) {
             finish()
         }
-
-        setContentView(R.layout.activity_calendar)
-
 
         // get intent
         val km = intent.getFloatExtra("totalkm", 0.0f)
@@ -46,9 +41,11 @@ class Target : AppCompatActivity() {
         val weightset = intent.getBooleanExtra("weightset", true)
         val tracking = intent.getBooleanExtra("addProgression", false)
 
+        // define textView
         val goals = findViewById<TextView>(R.id.textview_goals)
         val myDate = findViewById<TextView>(R.id.textView_date)
         val completed = findViewById<TextView>(R.id.textView_completed)
+        val percentage = findViewById<TextView>(R.id.textView_percentage)
 
         findViewById<Button>(R.id.button_goals).setOnClickListener {
             startActivity(Intent(this, Goal::class.java))
@@ -105,7 +102,7 @@ class Target : AppCompatActivity() {
             }
         }
 
-        /** Get values from time */
+        // Get values from time
         var day = ""
         var month = ""
         var year = ""
@@ -122,7 +119,6 @@ class Target : AppCompatActivity() {
             "kilometri" -> gU = "kilometriä"
             "kilogramma" -> gU = "kilogrammaa"
         }
-
         if(getAmount != "empty" && getTime != "empty") {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
         } else
@@ -136,6 +132,7 @@ class Target : AppCompatActivity() {
                     val amount = pref.getFloat("totalkm", 0.0f)
                     if (amount < getAmount.toInt()) {
                         completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
+                        calculatePercentage(percentage, amount.toDouble(), getAmount.toDouble())
                     } else
                         completed.text = "Tavoite suoritettu!"
                 }
@@ -153,6 +150,7 @@ class Target : AppCompatActivity() {
                         val amount = pref.getFloat("totalkcal", 0.0f)
                         if (amount < getAmount.toInt()) {
                             completed.text = "Suoritettu  %.2f".format(amount) + " kcal / $getAmount kcal"
+                            calculatePercentage(percentage, amount.toDouble(), getAmount.toDouble())
                         } else
                             completed.text = "Tavoite suoritettu!"
                     } else
@@ -174,7 +172,7 @@ class Target : AppCompatActivity() {
                 when (month) {
                     "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
                     "4", "6", "9", "11" -> daysInMonth = 30
-                    /** leap year check */
+                    // leap year check
                     "2" -> daysInMonth = if (y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
                 }
                 var newday = day.toInt()
@@ -208,6 +206,17 @@ class Target : AppCompatActivity() {
     private fun removeZero(str: String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
+    }
+
+    /**
+     * Set TextView as percentage of x, y
+     * @param t TextView element
+     * @param x
+     * @param y
+     */
+
+    private fun calculatePercentage(t: TextView, x: Double, y: Double) {
+        t.text = " %.1f".format((x / y) * 100) + "%"
     }
 
 }
