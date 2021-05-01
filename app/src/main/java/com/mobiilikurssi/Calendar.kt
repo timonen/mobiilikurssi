@@ -56,15 +56,45 @@ class Calendar : AppCompatActivity() {
             startActivity(Intent(this, Goal::class.java))
         }
 
-        // getting preferences
+        // getting goal preferences
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
         val getTime = pref.getString("päivä", "empty")
         val getUnit = pref.getString("kalori", "empty")
-        val getAmount = pref.getString("amount", "empty")
+        var getAmount = pref.getString("amount", "empty")
         val time = pref.getString("time", "empty")
-
         val editor = pref.edit()
-        // only add if not nan and positive number
+
+
+        // input sanitation
+        if(getUnit == "kilogramma") {
+            if (getAmount != null) {
+                when (getTime) {
+                    "päivä" -> {
+                        if (getAmount.toInt() > 1) {
+                            getAmount = "unreal"
+                        }
+                    }
+
+                    "viikko" -> {
+                        if (getAmount.toInt() > 4) {
+                            getAmount = "unreal"
+                        }
+                    }
+                    "kuukausi" -> {
+                        if (getAmount.toInt() > 10) {
+                            getAmount = "unreal"
+                        }
+                    }
+                }
+            }
+        }
+
+        // user preferences
+        val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
+        val startingweight = prefSettings.getString("weight", "empty")
+
+
+        /** Updating Goal preferences from MapsActivity intent  */
         if((!km.isNaN() && !kcal.isNaN()) && (km > 0 && kcal > 0)) {
             var totalkcal = pref.getFloat("totalkcal", 0.0f)
             var totalkm = pref.getFloat("totalkm", 0.0f)
@@ -75,15 +105,10 @@ class Calendar : AppCompatActivity() {
             editor.apply()
         }
 
-        // user preferences
-        val prefSettings = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
-        val startingweight = prefSettings.getString("weight", "empty")
-
-        // get values from time
+        /** Get values from time */
         var day = ""
         var month = ""
         var year = ""
-        // null check
         if(time != "empty") {
             day = time?.split(".")?.get(0)?.let { removeZero(it) }.toString()
             month = time?.split(".")?.get(1)?.let { removeZero(it) }.toString()
@@ -104,24 +129,25 @@ class Calendar : AppCompatActivity() {
             goals.text = "Ei uusia tavoitteita"
         }
 
-        /** logic for different units*/
+        /** Logic for different units */
         when(getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
                     val amount = pref.getFloat("totalkm", 0.0f)
                     if(amount < getAmount.toInt()) {
                         completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
-                    } else {
+                    } else
                         completed.text = "Tavoite suoritettu!"
-                    }
                 }
             }
             "kilogramma" -> {
                 if(startingweight != "empty") {
-                    completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
-                } else {
-                    completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
+                    if(getAmount != "unreal") {
+                        completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { startingweight?.toInt()?.minus(it) }}kg"
+                    }
+                    else completed.text = "Tavoitepainosi ei ole realistinen, aseta realistinen tavoite"
                 }
+                else completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
             }
             "kalori" -> {
                 if (getAmount != null) {
@@ -129,17 +155,15 @@ class Calendar : AppCompatActivity() {
                         val amount = pref.getFloat("totalkcal", 0.0f)
                         if(amount < getAmount.toInt()) {
                             completed.text = "Suoritettu  %.2f".format(amount) + " kcal / $getAmount kcal"
-                        } else {
+                        } else
                             completed.text = "Tavoite suoritettu!"
-                        }
-                    } else {
+                    } else
                         completed.text = "Aseta painosi asetuksissa niin näet kaloreiden kulutuksen"
-                    }
                 }
             }
         }
 
-        /** settings text (starting time - ending time) */
+        /** Time for goal (starting time - ending time) */
         val myG = "Tavoiteaika: "
         when(getTime) {
             "päivä" -> {
