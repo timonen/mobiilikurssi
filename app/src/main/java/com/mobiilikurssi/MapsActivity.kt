@@ -35,6 +35,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val tracker by lazy { LocationTracker(this) }
 
     private var lastLocation : Location? = null
+    private var lines : MutableList <Polyline> = ArrayList()
 
     /**
      * @param savedInstanceState
@@ -51,16 +52,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun toggleStartButton() {
+        //  Find the start button and invert the state
         val startButton : TextView = findViewById(R.id.button_start)
-        Log.i("test", "clickable ${startButton.isClickable}")
         val state = !startButton.isClickable
-        Log.i("test", "Now $state}")
 
+        //  Set opacity
         when(state) {
             false -> startButton.alpha = 0.5f
             true -> startButton.alpha = 1.0f
         }
 
+        //  Toggle button clickable state
         startButton.isClickable = state
     }
 
@@ -79,6 +81,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         tracker.onStartTracking = {
+            //  Clear previous route
+            for(line in lines)
+                line.remove()
+
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.mapred))
@@ -106,7 +112,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         .width(5f)
                         .color(Color.RED)
 
-                googleMap.addPolyline(opt)
+                lines.add(googleMap.addPolyline(opt))
             }
 
             t.text = "$count locations"
