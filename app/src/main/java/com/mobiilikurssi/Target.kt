@@ -16,12 +16,11 @@ import androidx.appcompat.app.AppCompatActivity
 
 /**
  * TODO write docs
- * Calendar class
+ * Target class
  * @author
  * @version 1.3
  */
-class Calendar : AppCompatActivity() {
-    private lateinit var calendarView: CalendarView
+class Target : AppCompatActivity() {
 
     /**
      * TODO
@@ -39,14 +38,6 @@ class Calendar : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_calendar)
-
-        //TODO show dates in calendar
-        calendarView = findViewById(R.id.calendarView)
-
-        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            Log.d("calendar", "$dayOfMonth $month $year")
-
-        }
 
 
         // get intent
@@ -220,3 +211,4 @@ class Calendar : AppCompatActivity() {
     }
 
 }
+
