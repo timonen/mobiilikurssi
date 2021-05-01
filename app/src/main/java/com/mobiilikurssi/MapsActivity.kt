@@ -1,6 +1,7 @@
 package com.mobiilikurssi
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -33,6 +34,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val tracker by lazy { LocationTracker(this) }
 
+    private var lastLocation : Location? = null
+
     /**
      * @param savedInstanceState
      */
@@ -64,8 +67,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * @param googleMap
      */
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.isMyLocationEnabled = true
 
         var startButton : TextView = findViewById(R.id.button_start)
         startButton.setOnClickListener {
@@ -86,40 +91,47 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegreen))
             btn.text = "Aloita liikkuminen"
 
-            var processed = 0
-            var previousLocation : Location? = null
-            var timeSum : Long = 0
+            //var processed = 0
+            //var previousLocation : Location? = null
 
-            val opt = PolylineOptions()
-            tracker.forEachLocation { location, timeDiff ->
-                if(processed > 0) {
-                    val prev : Location = previousLocation as Location
+            //val opt = PolylineOptions()
+            //tracker.forEachLocation { location, timeDiff ->
+            //    if(processed > 0) {
+            //        val prev : Location = previousLocation as Location
 
-                    //  Connect the locations with lines
-                    opt.add(LatLng(prev.latitude, prev.longitude),
-                            LatLng(location.latitude, location.longitude))
-                            .width(5f)
-                            .color(Color.RED)
-                }
+            //        //  Connect the locations with lines
+            //        opt.add(LatLng(prev.latitude, prev.longitude),
+            //                LatLng(location.latitude, location.longitude))
+            //                .width(5f)
+            //                .color(Color.RED)
+            //    }
 
-                googleMap.addPolyline(opt)
+            //    googleMap.addPolyline(opt)
 
-                previousLocation = location
-                timeSum += timeDiff
-                processed++
-            }
-
-            //  Get average speed by calculating distance / time
-            val averageSpeedMS : Float = tracker.getTotalMeters() / (timeSum / 1000)
-            Toast.makeText(applicationContext, "Avg $averageSpeedMS Processed $processed", Toast.LENGTH_SHORT).show()
+            //    previousLocation = location
+            //    processed++
+            //}
         }
 
         tracker.onNewLocation = { count ->
             val t : TextView = findViewById(R.id.textView)
-            val l = tracker.getLastLocation()
-            t.text = "count $count total ${tracker.getTotalMeters()} km ${l.latitude} ${l.longitude}"
+            val currentLocation = tracker.getLastLocation()
 
-            val position = LatLng(l.latitude, l.longitude)
+            if(lastLocation != null) {
+                //  Connect the locations with lines
+                val prev : Location = lastLocation as Location
+                val opt = PolylineOptions().add(LatLng(prev.latitude, prev.longitude),
+                        LatLng(currentLocation.latitude, currentLocation.longitude))
+                        .width(5f)
+                        .color(Color.RED)
+
+                googleMap.addPolyline(opt)
+            }
+
+            t.text = "$count locations"
+            lastLocation = currentLocation
+
+            val position = LatLng(currentLocation.latitude, currentLocation.longitude)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 17.0f));
         }
 
