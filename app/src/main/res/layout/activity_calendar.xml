@@ -5,7 +5,7 @@
     android:id="@+id/textview_date"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Calendar">
+    tools:context=".Target">
 
     <CalendarView
         android:id="@+id/calendarView"

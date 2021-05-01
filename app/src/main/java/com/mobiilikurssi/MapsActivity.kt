@@ -5,13 +5,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -138,7 +135,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val weight = pref.getString("weight", "empty")
 
-        val intent = Intent(this, Calendar::class.java).apply {
+        val intent = Intent(this, Target::class.java).apply {
             putExtra("totalkm", tracker.getTotalKilometers())
             putExtra("addProgression", tracking)
             if(weight != null) {

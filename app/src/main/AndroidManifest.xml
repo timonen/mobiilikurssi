@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobiilikurssi">
         <activity android:name=".Goal" android:hardwareAccelerated="true" />
-        <activity android:name=".Calendar" android:hardwareAccelerated="true" />
+        <activity android:name=".Target" android:hardwareAccelerated="true" />
         <activity android:name=".Settings" android:hardwareAccelerated="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

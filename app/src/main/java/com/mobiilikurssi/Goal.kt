@@ -63,7 +63,7 @@ class Goal : AppCompatActivity() {
             Toast.makeText(applicationContext, "Tavoite asetettu", Toast.LENGTH_SHORT).show()
 
             /** intent for going back to MapsActivity */
-            val intent = Intent(applicationContext, Calendar::class.java)
+            val intent = Intent(applicationContext, Target::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             intent.putExtra("EXIT", true)
             startActivity(intent)
