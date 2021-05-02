@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
+import java.io.File
 
 /**
  * TODO write docs
@@ -27,9 +29,9 @@ import com.google.android.gms.maps.model.PolylineOptions
  * @version 1.0
  */
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
     private val tracker by lazy { LocationTracker(this) }
+    private val io by lazy { IOwrap(this, "") }
 
     private var lastLocation : Location? = null
     private var lines : MutableList <Polyline> = ArrayList()
@@ -46,6 +48,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        var f : File = io.create("test.txt")
+        //io.writeLine(f, "full line of text2")
+        //io.writeLine(f, "full line of text3")
+        //Log.d("IOwrap", "onCreate: ${io.read((f))}")
+
+        io.toJson()
+        io.fromJson()
+
     }
 
     fun toggleStartButton() {
