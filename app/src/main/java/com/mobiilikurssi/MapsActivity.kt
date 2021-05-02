@@ -50,12 +50,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         var f : File = io.create("test.txt")
-        //io.writeLine(f, "full line of text2")
-        //io.writeLine(f, "full line of text3")
-        //Log.d("IOwrap", "onCreate: ${io.read((f))}")
-
-        io.toJson()
-        io.fromJson()
 
     }
 

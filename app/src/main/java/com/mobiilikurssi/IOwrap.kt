@@ -12,7 +12,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 @Serializable
-data class Template(val name: String, val votes: Int)
+data class Template(val km: Double, val kcal: Int, val date: String)
 
 /**
  * @author Roope Timonen
@@ -31,12 +31,13 @@ class IOwrap(ctx : Context, path : String) {
         val format = Json { isLenient = true }
         val data = format.decodeFromString<Template>("""
         { 
-            name   : something,
-            votes  : "9000"
+            km   : 100,
+            kcal  : 5000
+            date : "2.5.2021"
         }
     """)
 
-        Log.d("IOwrap", "${data.name}")
+        Log.d("IOwrap", "${data.km}")
 
     }
 
@@ -45,7 +46,7 @@ class IOwrap(ctx : Context, path : String) {
      */
     fun toJson(){
         val format = Json { isLenient = true }
-        val data = Template("json name", 102)
+        val data = Template(10.0, 102, "10.2.2021")
         Log.d("IOwrap", "$data")
     }
 
