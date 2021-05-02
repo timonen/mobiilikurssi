@@ -5,18 +5,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.math.pow
-
 
 /**
  * This class shows off the current Goal and its progress
@@ -32,7 +27,7 @@ class Target : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar)
+        setContentView(R.layout.activity_target)
 
         // if from Goal go back to MapsActivity
         if (intent.getBooleanExtra("EXIT", false)) {
@@ -120,7 +115,6 @@ class Target : AppCompatActivity() {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
         } else
             goals.text = "Ei uusia tavoitteita"
-
 
         /** Logic for different units */
         when(getUnit) {
@@ -243,6 +237,5 @@ class Target : AppCompatActivity() {
     private fun calculatePercentage(t: TextView, x: Double, y: Double) {
         t.text = " %.1f".format((x / y) * 100) + "%"
     }
-
 }
 
