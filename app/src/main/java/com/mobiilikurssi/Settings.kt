@@ -14,7 +14,7 @@ import kotlin.math.pow
  *
  * This class takes users height and weight as an input.
  * Outputs users bmi back to the user.
- * And saves all the values as preferences.
+ * And saves user measurements as preferences.
  *
  * @author Valtteri Viirret
  * @version 1.0
@@ -44,16 +44,13 @@ class Settings : AppCompatActivity() {
             editor.putString("height", height.text.toString())
             editor.putString("weight", weight.text.toString())
             editor.putBoolean("measureSet", true)
+            editor.apply()
 
             val h = height.text.toString().toDouble()
             val w = weight.text.toString().toDouble()
 
-            // bmi and bmi formatted
+            // calculating bmi
             val bmi = h.div(100).let { w.div(it.pow(2)) }
-            val bmiF = "%.1f".format(h.div(100).let { w.div(it.pow(2)) })
-
-            editor.putString("bmi", bmiF)
-            editor.apply()
 
             bmiText.text = bmiSettings(bmi)
 
@@ -67,7 +64,8 @@ class Settings : AppCompatActivity() {
      */
     private fun bmiSettings(bmi: Double): String {
         return when(bmi) {
-            in 0.0..18.5 -> "Olet alipainoinen"
+            in 0.0..15.0 -> "Kärsit anoreksiasta"
+            in 15.0..18.5 -> "Olet alipainoinen"
             in 18.5..24.9 -> "Olet normaalipainoinen"
             in 24.9..29.0 -> "Olet ylipainoinen"
             else -> "Olet liikalihava"
