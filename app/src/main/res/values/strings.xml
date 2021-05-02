@@ -4,7 +4,7 @@
     <!--Main -->
     <string name="string_settings">Asetukset</string>
     <string name="string_start_journey">Aloita liikkuminen</string>
-    <string name="string_show_history">Näytä matkani</string>
+    <string name="string_show_history">Tavoitteeni</string>
 
     <!--Calendar -->
     <string name="string_calendar">Kalenteri</string>
