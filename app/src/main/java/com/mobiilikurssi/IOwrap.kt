@@ -24,8 +24,10 @@ class IOwrap(ctx : Context, path : String) {
     private val basePath : File = ctx.filesDir
     private val dir = File(basePath, path)
 
-
-    fun toJson() {
+    /**
+     * Test json to object conversion
+     */
+    fun fromJson() {
         val format = Json { isLenient = true }
         val data = format.decodeFromString<Template>("""
         { 
@@ -38,7 +40,10 @@ class IOwrap(ctx : Context, path : String) {
 
     }
 
-    fun fromJson(){
+    /**
+     * Test object to json conversion
+     */
+    fun toJson(){
         val format = Json { isLenient = true }
         val data = Template("json name", 102)
         Log.d("IOwrap", "$data")
