@@ -54,7 +54,7 @@ class Target : AppCompatActivity() {
         val pref: SharedPreferences = this.getSharedPreferences("GOAL", MODE_PRIVATE)
         val getTime = pref.getString("päivä", "empty")
         val getUnit = pref.getString("kalori", "empty")
-        var getAmount = pref.getString("amount", "empty")
+        var getAmount = pref.getString("amount", "")
         val time = pref.getString("time", "empty")
         val editor = pref.edit()
 
@@ -64,26 +64,28 @@ class Target : AppCompatActivity() {
         val height = prefSettings.getString("height", "empty")
 
         // input sanitization for weight goal
-        if(getUnit == "kilogramma") {
+        if (getUnit == "kilogramma") {
             if (getAmount != null) {
-                val w = getAmount.toInt()
-                when (getTime) {
-                    "päivä" -> if (w > 1)  getAmount = "unreal"
-                    "viikko" -> if (w > 4)  getAmount = "unreal"
-                    "kuukausi" -> if (w > 10)  getAmount = "unreal"
-                }
-                // if goalweight is below bmi 15 (anorexia)
-                val goalWeight = weight?.toInt()?.minus(w)
-                val bmi = height!!.toDouble().div(100).let { goalWeight?.div(it.pow(2)) }
-                if(bmi!! < 15.0) {
-                    getAmount = "unreal"
+                if (getAmount != "") {
+                    val w = getAmount.toInt()
+                    when (getTime) {
+                        "päivä" -> if (w > 1) getAmount = "unreal"
+                        "viikko" -> if (w > 4) getAmount = "unreal"
+                        "kuukausi" -> if (w > 10) getAmount = "unreal"
+                    }
+                    // if goalweight is below bmi 15 (anorexia)
+                    val goalWeight = weight?.toInt()?.minus(w)
+                    val bmi = height!!.toDouble().div(100).let { goalWeight?.div(it.pow(2)) }
+                    if (bmi!! < 15.0) {
+                        getAmount = "unreal"
+                    }
                 }
             }
         }
 
         /** Updating Goal preferences from MapsActivity intent  */
-        if((!km.isNaN() && !kcal.isNaN()) && (km > 0 && kcal > 0)) {
-            if(tracking) {
+        if ((!km.isNaN() && !kcal.isNaN()) && (km > 0 && kcal > 0)) {
+            if (tracking) {
                 var totalkcal = pref.getFloat("totalkcal", 0.0f)
                 var totalkm = pref.getFloat("totalkm", 0.0f)
                 totalkm += km
@@ -98,7 +100,7 @@ class Target : AppCompatActivity() {
         var day = ""
         var month = ""
         var year = ""
-        if(time != "empty") {
+        if (time != "empty") {
             day = time?.split(".")?.get(0)?.let { RZ(it) }.toString()
             month = time?.split(".")?.get(1)?.let { RZ(it) }.toString()
             year = time?.split(".")?.get(2).toString()
@@ -106,46 +108,56 @@ class Target : AppCompatActivity() {
 
         // text explaining the goal
         var gU = ""
-        when(getUnit) {
+        when (getUnit) {
             "kalori" -> gU = "kaloria"
             "kilometri" -> gU = "kilometriä"
             "kilogramma" -> gU = "kilogrammaa"
         }
-        if(getAmount != "unreal" && getTime != "empty") {
+        if (getAmount != "unreal" && getTime != "empty" && getAmount != "") {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
         } else
             goals.text = "Ei uusia tavoitteita"
 
         /** Logic for different units */
-        when(getUnit) {
+        when (getUnit) {
             "kilometri" -> {
                 if (getAmount != null) {
                     val amount = pref.getFloat("totalkm", 0.0f)
-                    if (amount < getAmount.toInt()!!) {
-                        completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
-                        calculatePercentage(percentage, amount.toDouble(), getAmount.toDouble())
-                    } else
-                        completed.text = "Tavoite suoritettu!"
-                }
-            }
-            "kilogramma" -> {
-                if (weight != "empty") {
-                    if (getAmount != "unreal") {
-                        completed.text = "Tavoitepaino: ${getAmount?.toInt()?.let { weight?.toInt()?.minus(it) }}kg"
-                    } else completed.text = "Tavoitepainosi ei ole realistinen, aseta realistinen tavoite"
-                } else completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
-            }
-            "kalori" -> {
-                if (getAmount != null) {
-                    if (weightset) {
-                        val amount = pref.getFloat("totalkcal", 0.0f)
-                        if (amount < getAmount.toInt()) {
-                            completed.text = "Suoritettu  %.2f".format(amount) + " kcal / $getAmount kcal"
+                    if(getAmount != "") {
+                        if (amount < getAmount.toFloat()) {
+                            completed.text = "Suoritettu %.2f".format(amount) + " km / $getAmount km"
                             calculatePercentage(percentage, amount.toDouble(), getAmount.toDouble())
                         } else
                             completed.text = "Tavoite suoritettu!"
                     } else
-                        completed.text = "Aseta painosi asetuksissa niin näet kaloreiden kulutuksen"
+                        completed.text = "Aseta kunnollinen tavoite"
+                }
+            }
+            "kilogramma" -> {
+                if(getAmount != null) {
+                    if (getAmount != "") {
+                        if (weight != "empty") {
+                            if (getAmount != "unreal") {
+                                completed.text = "Tavoitepaino: ${getAmount.toInt().let { weight?.toInt()?.minus(it) }}kg"
+                            } else completed.text = "Tavoitepainosi ei ole realistinen, aseta realistinen tavoite"
+                        } else completed.text = "Aseta painosi asetuksissa niin näet tavoitepainosi tavoiteajan kuluttua"
+                    } else completed.text = "Aseta kunnollinen tavoite"
+                }
+            }
+            "kalori" -> {
+                if (getAmount != null) {
+                    if (getAmount != "") {
+                        val amount = pref.getFloat("totalkcal", 0.0f)
+                        if (weightset) {
+                            if (amount < getAmount.toFloat()) {
+                                completed.text = "Suoritettu  %.2f".format(amount) + " kcal / $getAmount kcal"
+                                calculatePercentage(percentage, amount.toDouble(), getAmount.toDouble())
+                            } else
+                                completed.text = "Tavoite suoritettu!"
+                        } else
+                            completed.text = "Aseta painosi asetuksissa niin näet kaloreiden kulutuksen"
+                    } else
+                        completed.text = "Aseta kunnollinen tavoite"
                 }
             }
         }
@@ -164,55 +176,57 @@ class Target : AppCompatActivity() {
 
         /** Time for goal (starting time - ending time) */
         val myG = "Tavoiteaika: "
-        when(getTime) {
-            "päivä" -> {
-                val newday = day.toInt().plus(1)
+        if (getAmount != "") {
+            when (getTime) {
+                "päivä" -> {
+                    val newday = day.toInt().plus(1)
 
-                if(currentDay!! > day) {
-                    myDate.text = "Tavoiteaika on päättynyt"
-                } else
-                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.${RZ(month)}.$year"
-            }
-            "viikko" -> {
-                var daysInMonth = 0
-                val y = year.toInt()
-                when (month) {
-                    "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
-                    "4", "6", "9", "11" -> daysInMonth = 30
-                    // leap year check
-                    "2" -> daysInMonth = if (y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
+                    if (currentDay!! > day) {
+                        myDate.text = "Tavoiteaika on päättynyt"
+                    } else
+                        myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.${RZ(month)}.$year"
                 }
-                var newday = day.toInt()
-                var newmonth = month.toInt()
-                for (i in 1..7) {
-                    if (newday < daysInMonth) {
-                        newday += 1
-                    } else {
-                        newmonth += 1
-                        newday = 1
+                "viikko" -> {
+                    var daysInMonth = 0
+                    val y = year.toInt()
+                    when (month) {
+                        "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
+                        "4", "6", "9", "11" -> daysInMonth = 30
+                        // leap year check
+                        "2" -> daysInMonth = if (y % 4 == 0 && y % 100 != 0 || y % 400 == 0) 29 else 28
                     }
+                    var newday = day.toInt()
+                    var newmonth = month.toInt()
+                    for (i in 1..7) {
+                        if (newday < daysInMonth) {
+                            newday += 1
+                        } else {
+                            newmonth += 1
+                            newday = 1
+                        }
+                    }
+
+                    if (currentDay!! > day && currentMonth!! > month) {
+                        myDate.text = "Tavoiteaika on päättynyt"
+                    } else
+                        myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.$newmonth.$year"
                 }
+                "kuukausi" -> {
+                    val newmonth = month.toInt().plus(1)
 
-                if(currentDay!! > day && currentMonth!! > month) {
-                    myDate.text = "Tavoiteaika on päättynyt"
-                } else
-                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.$newmonth.$year"
-            }
-            "kuukausi" -> {
-                val newmonth = month.toInt().plus(1)
+                    if (currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
+                        myDate.text = "Tavoiteaika on päättynyt"
+                    } else
+                        myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$newmonth.$year"
+                }
+                "vuosi" -> {
+                    val newyear = year.toInt().plus(1)
 
-                if(currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
-                    myDate.text = "Tavoiteaika on päättynyt"
-                } else
-                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$newmonth.$year"
-            }
-            "vuosi" -> {
-                val newyear = year.toInt().plus(1)
-
-                if(currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
-                    myDate.text = "Tavoiteaika on päättynyt"
-                } else
-                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$month.$newyear"
+                    if (currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
+                        myDate.text = "Tavoiteaika on päättynyt"
+                    } else
+                        myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$month.$newyear"
+                }
             }
         }
     }
