@@ -137,8 +137,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(Intent(this, Settings::class.java))
         }
 
-        findViewById<Button>(R.id.button_history).setOnClickListener {
+        findViewById<Button>(R.id.button_goals).setOnClickListener {
             setIntentCalendar(false)
+        }
+
+        findViewById<Button>(R.id.button_history).setOnClickListener {
+            startActivity(Intent(this, History::class.java))
         }
     }
 

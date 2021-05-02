@@ -4,7 +4,8 @@
     <!--Main -->
     <string name="string_settings">Asetukset</string>
     <string name="string_start_journey">Aloita liikkuminen</string>
-    <string name="string_show_history">Tavoitteeni</string>
+    <string name="string_show_goals">Tavoitteeni</string>
+    <string name="string_show_history">Historia</string>
 
     <!--Calendar -->
     <string name="string_calendar">Kalenteri</string>
@@ -26,7 +27,8 @@
     <string name="string_amount">Määrä</string>
     <string name="string_send">Luo tavoite</string>
 
-
+    <!-- History -->
+    <string name="string_history_title">Historia</string>
 
 
 </resources>
