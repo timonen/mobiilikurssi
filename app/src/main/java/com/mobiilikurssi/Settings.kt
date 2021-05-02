@@ -14,7 +14,7 @@ import kotlin.math.pow
  *
  * This class takes users height and weight as an input.
  * Outputs users bmi back to the user.
- * And saves all values as preferences.
+ * And saves user measurements as preferences.
  *
  * @author Valtteri Viirret
  * @version 1.0

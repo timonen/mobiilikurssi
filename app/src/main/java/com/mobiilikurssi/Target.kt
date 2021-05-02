@@ -6,12 +6,15 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.CalendarView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.pow
 
 
@@ -65,15 +68,16 @@ class Target : AppCompatActivity() {
         val weight = prefSettings.getString("weight", "empty")
         val height = prefSettings.getString("height", "empty")
 
-        // input sanitation for weight goal
+        // input sanitization for weight goal
         if(getUnit == "kilogramma") {
             if (getAmount != null) {
                 val w = getAmount.toInt()
                 when (getTime) {
-                    "päivä" -> if (w > 1) { getAmount = "unreal" }
-                    "viikko" -> if (w > 4) { getAmount = "unreal" }
-                    "kuukausi" -> if (w > 10) { getAmount = "unreal" }
+                    "päivä" -> if (w > 1)  getAmount = "unreal"
+                    "viikko" -> if (w > 4)  getAmount = "unreal"
+                    "kuukausi" -> if (w > 10)  getAmount = "unreal"
                 }
+                // if goalweight is below bmi 15 (anorexia)
                 val goalWeight = weight?.toInt()?.minus(w)
                 val bmi = height!!.toDouble().div(100).let { goalWeight?.div(it.pow(2)) }
                 if(bmi!! < 15.0) {
@@ -95,13 +99,13 @@ class Target : AppCompatActivity() {
             }
         }
 
-        // Get values from time
+        // Get values from time, these time values describe time when goal was set
         var day = ""
         var month = ""
         var year = ""
         if(time != "empty") {
-            day = time?.split(".")?.get(0)?.let { removeZero(it) }.toString()
-            month = time?.split(".")?.get(1)?.let { removeZero(it) }.toString()
+            day = time?.split(".")?.get(0)?.let { RZ(it) }.toString()
+            month = time?.split(".")?.get(1)?.let { RZ(it) }.toString()
             year = time?.split(".")?.get(2).toString()
         }
 
@@ -152,12 +156,28 @@ class Target : AppCompatActivity() {
             }
         }
 
+        // getting current date
+        val currentDateTime = LocalDateTime.now()
+        val calendar = java.util.Calendar.getInstance()
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
+        calendar.set(
+                currentDateTime.year, currentDateTime.monthValue, currentDateTime.dayOfMonth
+        )
+        val currentTime = sdf.format(calendar.timeInMillis)
+        val currentDay = currentTime?.split(".")?.get(0)?.let { RZ(it) }
+        val currentMonth = currentTime?.split(".")?.get(1)?.let { RZ(it) }
+        val currentYear = currentTime?.split(".")?.get(2)?.let { RZ(it) }
+
         /** Time for goal (starting time - ending time) */
         val myG = "Tavoiteaika: "
         when(getTime) {
             "päivä" -> {
                 val newday = day.toInt().plus(1)
-                myDate.text = "$myG$day.$month.$year - $newday.$month.$year"
+
+                if(currentDay!! > day) {
+                    myDate.text = "Tavoiteaika on päättynyt"
+                } else
+                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.${RZ(month)}.$year"
             }
             "viikko" -> {
                 var daysInMonth = 0
@@ -173,20 +193,32 @@ class Target : AppCompatActivity() {
                 for (i in 1..7) {
                     if (newday < daysInMonth) {
                         newday += 1
-                    } else
+                    } else {
+                        newmonth += 1
                         newday = 1
-                    newmonth += 1
-
+                    }
                 }
-                myDate.text = "$myG$day.$month.$year - $newday.$newmonth.$year"
+
+                if(currentDay!! > day && currentMonth!! > month) {
+                    myDate.text = "Tavoiteaika on päättynyt"
+                } else
+                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.$newmonth.$year"
             }
             "kuukausi" -> {
                 val newmonth = month.toInt().plus(1)
-                myDate.text = "$myG$day.$month.$year - $day.$newmonth.$year"
+
+                if(currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
+                    myDate.text = "Tavoiteaika on päättynyt"
+                } else
+                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$newmonth.$year"
             }
             "vuosi" -> {
                 val newyear = year.toInt().plus(1)
-                myDate.text = "$myG$day.$month.$year - $day.$month.$newyear"
+
+                if(currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
+                    myDate.text = "Tavoiteaika on päättynyt"
+                } else
+                    myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$month.$newyear"
             }
         }
     }
@@ -196,7 +228,7 @@ class Target : AppCompatActivity() {
      * @param str input string
      * @return replaced string
      */
-    private fun removeZero(str: String) : String {
+    private fun RZ(str: String) : String {
         val regex = "^0+(?!$)".toRegex()
         return regex.replace(str, "")
     }
