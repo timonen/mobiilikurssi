@@ -3,6 +3,7 @@ package com.mobiilikurssi
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +26,14 @@ class History : AppCompatActivity() {
         setContentView(R.layout.activity_history)
         listView = findViewById<ListView>(R.id.historyList)
 
-        var f : File = io.open("test.txt")
+        var f = io.open("test2.txt");
 
-        val list: MutableList<Template> = io.fromJsontest("""[{"km":10.0,"kcal":10.0,"date":"test"},{"km":10.0,"kcal":10.0,"date":"test"}]""")
+        for(i in 1..10)
+            io.save(f,10f,10f, "$i.5.2021")
+
+        Log.d("IOwrap", "${io.read(f)}")
+
+        val list: MutableList<Template> = io.fromJsonToList("""[{"km":10.0,"kcal":10.0,"date":"test"},{"km":10.0,"kcal":10.0,"date":"test"}]""")
 
         adapter = MyAdapter(this, list)
         listView.adapter = adapter

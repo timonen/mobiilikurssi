@@ -37,7 +37,6 @@ class IOwrap(ctx : Context, path : String) {
         return data
     }
 
-
     /**
      * Convert JSON to Template
      * @param json String
@@ -68,10 +67,9 @@ class IOwrap(ctx : Context, path : String) {
      * @param kcal
      * @param date
      */
-    fun save(km: Float, kcal: Float, date: String){
-        //var whole = read();
+    fun save(f: File, km: Float, kcal: Float, date: String){
         val tmp = toJson(Template(km,kcal,date));
-
+        writeLine(f,tmp)
     }
 
     /**
@@ -96,7 +94,7 @@ class IOwrap(ctx : Context, path : String) {
             return file
         else
             file.appendText("")
-            return file;
+            return file
     }
 
     /**
