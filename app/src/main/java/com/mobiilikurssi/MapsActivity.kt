@@ -140,7 +140,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         findViewById<Button>(R.id.button_goals).setOnClickListener {
-            setIntentCalendar(false)
+            startTarget(false)
         }
 
         findViewById<Button>(R.id.button_history).setOnClickListener {

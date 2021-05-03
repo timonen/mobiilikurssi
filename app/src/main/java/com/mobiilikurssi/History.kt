@@ -74,8 +74,8 @@ class MyAdapter(private val context: Context, private val arrayList: MutableList
         km = convertView.findViewById(R.id.row_template_km)
         kcal = convertView.findViewById(R.id.row_template_kcal)
         date = convertView.findViewById(R.id.row_template_date)
-        km.text = arrayList[position].km.toString()
-        kcal.text = arrayList[position].kcal.toString()
+        km.text = "Kilometrejä: ${arrayList[position].km.toString()}"
+        kcal.text = "Kaloreita: ${arrayList[position].kcal.toString()}"
         date.text = arrayList[position].date
         return convertView
     }
