@@ -96,7 +96,7 @@ class Target : AppCompatActivity() {
             }
         }
 
-        // Get values from time, these time values describe time when goal was set
+        // Get values from time variable. These describe time when goal was set
         var day = ""
         var month = ""
         var year = ""
@@ -117,6 +117,7 @@ class Target : AppCompatActivity() {
             goals.text = "Tavoite: $getAmount $gU / $getTime"
         } else
             goals.text = "Ei uusia tavoitteita"
+
 
         /** Logic for different units */
         when (getUnit) {
@@ -181,14 +182,17 @@ class Target : AppCompatActivity() {
                 "päivä" -> {
                     val newday = day.toInt().plus(1)
 
+                    // if current day is bigger than the day goal was set
                     if (currentDay!! > day) {
                         myDate.text = "Tavoiteaika on päättynyt"
                     } else
+                        // RZ removes unneeded zeros
                         myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.${RZ(month)}.$year"
                 }
                 "viikko" -> {
                     var daysInMonth = 0
                     val y = year.toInt()
+                    // how many days in a month
                     when (month) {
                         "1", "3", "5", "7", "8", "10", "12" -> daysInMonth = 31
                         "4", "6", "9", "11" -> daysInMonth = 30
@@ -197,6 +201,7 @@ class Target : AppCompatActivity() {
                     }
                     var newday = day.toInt()
                     var newmonth = month.toInt()
+                    // add seven days. If more days than in current month, start counting from new month
                     for (i in 1..7) {
                         if (newday < daysInMonth) {
                             newday += 1
@@ -206,23 +211,25 @@ class Target : AppCompatActivity() {
                         }
                     }
 
-                    if (currentDay!! > day && currentMonth!! > month) {
+                    if (currentDay!!.toInt() > newday && currentMonth!!.toInt() == newmonth) {
                         myDate.text = "Tavoiteaika on päättynyt"
                     } else
                         myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $newday.$newmonth.$year"
+
                 }
                 "kuukausi" -> {
                     val newmonth = month.toInt().plus(1)
 
-                    if (currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
+                    if (currentDay!! > day && currentMonth!!.toInt() == newmonth) {
                         myDate.text = "Tavoiteaika on päättynyt"
                     } else
                         myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$newmonth.$year"
+
                 }
                 "vuosi" -> {
                     val newyear = year.toInt().plus(1)
 
-                    if (currentDay!! > day && currentMonth!! > month && currentYear!! > year) {
+                    if (currentDay!! > day && currentMonth!! > month && currentYear!!.toInt() == newyear) {
                         myDate.text = "Tavoiteaika on päättynyt"
                     } else
                         myDate.text = "$myG${RZ(day)}.${RZ(month)}.$year - $day.$month.$newyear"
@@ -252,4 +259,5 @@ class Target : AppCompatActivity() {
         t.text = " %.1f".format((x / y) * 100) + "%"
     }
 }
+
 
