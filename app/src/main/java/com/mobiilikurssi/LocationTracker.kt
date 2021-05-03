@@ -14,10 +14,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 /**
- * TODO write docs
- * Location tracked class
- * @author
- * @version 1.0
+ * LocationTracker tracks the user location using the GPS
+ * @author Roope Rekunen
  */
 class LocationTracker(private val ctx : Context) : LocationListener {
     private var locationManager : LocationManager? = null
@@ -54,7 +52,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
             totalDistance += locationDelta;
         }
 
-        //  Add the location and call the user callback
+        //  Add the location and call the new location callback
         locations.add(Pair(location, currentTime))
         onNewLocation?.invoke(locations.count())
     }
@@ -76,8 +74,7 @@ class LocationTracker(private val ctx : Context) : LocationListener {
     }
 
     /**
-     *  onNewLocation is a callback that's called when there's a new location.
-     */
+     *  onNewLocation is a callback that's called when there's a new location. */
     var onNewLocation : ((locationCount : Int) -> Unit)? = null
 
     /**
@@ -88,6 +85,11 @@ class LocationTracker(private val ctx : Context) : LocationListener {
      *  onEndTracking is a callback that's called when tracking has ended. */
     var onEndTracking : (() -> Unit)? = null
 
+    /**
+     *  onLocationUnavailable is a callback that's called when the GPS is unavailable. */
+    var onLocationUnavailable : (() -> Unit)? = null
+
+    //  Init block, called after the primary constructor
     init {
         //  Get the location manager service
         locationManager = ctx.getSystemService(LOCATION_SERVICE) as LocationManager?
@@ -105,18 +107,25 @@ class LocationTracker(private val ctx : Context) : LocationListener {
      */
     @SuppressLint("MissingPermission")
     fun toggleTrack() {
+        val gpsEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) as Boolean
+
+        //  If no permission is given or GPS is disabled, error out
+        if(!permissionGranted || !gpsEnabled) {
+            onLocationUnavailable?.invoke()
+            return
+        }
+
         //  Toggle from true -> false or false -> true
         tracking = !tracking
 
         //  If the tracker should track and we have permissions, reset and request location
         if(tracking) {
-            if (permissionGranted) {
-                locations.clear()
-                totalDistance = 0.0f
-                elapsedTime = 0
+            locations.clear()
+            totalDistance = 0.0f
+            elapsedTime = 0
 
-                locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
-            }
+            //  Ask the GPS for location updates so that onLocationChanged is called
+            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5f, this);
         }
 
         //  If the tracker shouldn't track stop tracking

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,10 +23,8 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 
 /**
- * TODO write docs
- * Map activity class
- * @author
- * @version 1.0
+ *  The main menu class containing all the necessary buttons and a map
+ * @author Roope Rekunen, Valtteri Viirret
  */
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -35,11 +34,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var lines : MutableList <Polyline> = ArrayList()
 
     /**
+     * onCreate is a function that's called when the activity is being created
      * @param savedInstanceState
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2)
 
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -64,6 +63,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
+     * Function that's called when the google map is ready
      * @param googleMap
      */
     @SuppressLint("MissingPermission")
@@ -77,6 +77,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             tracker.toggleTrack()
         }
 
+        tracker.onLocationUnavailable = {
+            toggleStartButton()
+            Toast.makeText(this, "Laita GPS päälle ja varmista että sovellus saa etsiä sijaintisi", Toast.LENGTH_LONG).show()
+        }
+
+        //  What happens when tracking has started?
         tracker.onStartTracking = {
             //  Clear previous route
             for(line in lines)
@@ -85,24 +91,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //  Reset the line origin
             lastLocation = null
 
+            //  The start button should now be the stop button
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.mapred))
             btn.text = "Lopeta seuranta"
         }
 
+        //  What happens when tracking has ended?
         tracker.onEndTracking = {
+            //  The stop button should now be the start button
             toggleStartButton()
             val btn = findViewById<Button>(R.id.button_start)
             btn.setBackgroundColor(ContextCompat.getColor(this, R.color.themegreen))
             btn.text = "Aloita liikkuminen"
 
-            setIntentCalendar(true)
+            //  Show the calendar and save the progression
+            startTarget(true)
         }
 
+        //  What happens when there's a new location
         tracker.onNewLocation = { count ->
-            val t : TextView = findViewById(R.id.textView)
             val currentLocation = tracker.getLastLocation()
+            Log.i("main", "$count locations")
 
             if(lastLocation != null) {
                 //  Connect the locations with lines
@@ -112,16 +123,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         .width(5f)
                         .color(Color.RED)
 
+                //  Save the line and show it
                 lines.add(googleMap.addPolyline(opt))
             }
 
-            t.text = "$count locations"
             lastLocation = currentLocation
 
+            //  Move the camera to the new position
             val position = LatLng(currentLocation.latitude, currentLocation.longitude)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 17.0f));
         }
 
+        //  Go to the settings menu when the button is pressed
         findViewById<Button>(R.id.button_settings).setOnClickListener {
             startActivity(Intent(this, Settings::class.java))
         }
@@ -136,22 +149,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * This function sets Intent for Calendar.
+     * This function sets Intent for Target.
      * @param update Boolean that handles updating value
      *
      */
-    private fun setIntentCalendar(update: Boolean) {
+    private fun startTarget(update: Boolean) {
+        // get user weight
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val weight = pref.getString("weight", "empty")
 
         val intent = Intent(this, Target::class.java).apply {
             putExtra("totalkm", tracker.getTotalKilometers())
+
+            // parameter for calling this function. True means updating values
             putExtra("addProgression", update)
+
             if(weight != null) {
+                // average speed for trip. (m/s) / 3.6 = km/h
                 val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
+
+                // send calorie information if weight is set
                 if(weight != "empty") {
+
+                    // getTotalCalories(duration, average speed, user weight)
                     putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
                 } else
+                    // boolean checking if weight is set by user
                     putExtra("weightset", false)
             }
         }
