@@ -1,13 +1,8 @@
 package com.mobiilikurssi
 
 import android.content.Context
-import android.os.Environment
 import android.util.Log
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.PrintWriter
-import kotlin.math.log
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
@@ -29,18 +24,7 @@ data class Template(val km: Float, val kcal: Float, val date: String)
 class IOwrap(ctx : Context, path : String) {
     private val basePath : File = ctx.filesDir
     private val dir = File(basePath, path)
-
-    /**
-     * Convert JSON to Template
-     * @param json String
-     * @return Template
-     */
-    fun fromJson(json: String): Template {
-        val format = Json { isLenient = true }
-        val data = format.decodeFromString<Template>(json)
-        Log.d("IOwrap", "${data.km}")
-        return data
-    }
+    val format = Json { isLenient = true }
 
     /**
      * Convert Template to JSON
@@ -48,19 +32,33 @@ class IOwrap(ctx : Context, path : String) {
      * @return JSON String
      */
     fun toJson(input: Template): String {
-        val format = Json { isLenient = true }
         val data = format.encodeToString(input)
         Log.d("IOwrap", "$data")
         return data
     }
 
-    fun fromJsontest(json: String): MutableList<Template> {
-        val format = Json { isLenient = true }
+
+    /**
+     * Convert JSON to Template
+     * @param json String
+     * @return Template
+     */
+    fun fromJson(json: String): Template {
+        val data = format.decodeFromString<Template>(json)
+        Log.d("IOwrap", "${data.km}")
+        return data
+    }
+
+    /**
+     * Convert JSON array to mutable list of Templates
+     * @param json
+     * @return
+     */
+    fun fromJsonToList(json: String): MutableList<Template> {
         val data = format.decodeFromString<MutableList<Template>>(json)
         Log.d("IOwrap", "$data")
         return data
     }
-
 
     /**
      * TODO finish this
