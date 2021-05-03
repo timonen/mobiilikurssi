@@ -108,7 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             btn.text = "Aloita liikkuminen"
 
             //  Show the calendar and save the progression
-            setIntentCalendar(true)
+            startTarget(true)
         }
 
         //  What happens when there's a new location
@@ -142,27 +142,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //  Go to the calendar menu when the button is pressed
         findViewById<Button>(R.id.button_history).setOnClickListener {
-            setIntentCalendar(false)
+            startTarget(false)
         }
     }
 
     /**
-     * This function sets Intent for Calendar.
+     * This function sets Intent for Target.
      * @param update Boolean that handles updating value
      *
      */
-    private fun setIntentCalendar(update: Boolean) {
+    private fun startTarget(update: Boolean) {
+        // get user weight
         val pref: SharedPreferences = this.getSharedPreferences("SETTINGS", MODE_PRIVATE)
         val weight = pref.getString("weight", "empty")
 
         val intent = Intent(this, Target::class.java).apply {
             putExtra("totalkm", tracker.getTotalKilometers())
+
+            // parameter for calling this function. True means updating values
             putExtra("addProgression", update)
+
             if(weight != null) {
+                // average speed for trip. (m/s) / 3.6 = km/h
                 val avgS = (tracker.getTotalMeters().div(tracker.getDurationSeconds())).div(3.6)
+
+                // send calorie information if weight is set
                 if(weight != "empty") {
+
+                    // getTotalCalories(duration, average speed, user weight)
                     putExtra("totalkcal", getTotalCalories(tracker.getDurationMinutes(), avgS, weight.toInt()))
                 } else
+                    // boolean checking if weight is set by user
                     putExtra("weightset", false)
             }
         }
