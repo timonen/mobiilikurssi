@@ -1,7 +1,6 @@
 package com.mobiilikurssi
 
 import android.content.Context
-import android.util.Log
 import java.io.File
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -33,7 +32,16 @@ class IOwrap(ctx : Context, path : String) {
      */
     fun toJson(input: Template): String {
         val data = format.encodeToString(input)
-        Log.d("IOwrap", "$data")
+        return data
+    }
+
+    /**
+     * Convert Template list to JSON
+     * @param input
+     * @return
+     */
+    fun toJsonFromList(input: MutableList<Template>): String {
+        val data = format.encodeToString(input)
         return data
     }
 
@@ -44,7 +52,6 @@ class IOwrap(ctx : Context, path : String) {
      */
     fun fromJson(json: String): Template {
         val data = format.decodeFromString<Template>(json)
-        Log.d("IOwrap", "${data.km}")
         return data
     }
 
@@ -55,30 +62,59 @@ class IOwrap(ctx : Context, path : String) {
      */
     fun fromJsonToList(json: String): MutableList<Template> {
         val data = format.decodeFromString<MutableList<Template>>(json)
-        Log.d("IOwrap", "$data")
         return data
     }
 
     /**
-     * TODO finish this
-     *
-     * Saves passed values as JSON object in file
+     * Creates Template using passed parameters
+     * Adds Template to array
+     * Saves to file
+     * @param file
      * @param km
      * @param kcal
      * @param date
      */
-    fun save(f: File, km: Float, kcal: Float, date: String){
-        val tmp = toJson(Template(km,kcal,date));
-        writeLine(f,tmp)
+    fun save(file: File, km: Float, kcal: Float, date: String){
+        val t = Template(km, kcal, date)
+        var tmp = open("tmp")
+        try {
+            var list: MutableList<Template> = fromJsonToList(read(file)) // will fail if file empty
+            list.add(t)
+            write(tmp,toJsonFromList(list))
+        } catch (e: Exception) {
+            var list: MutableList<Template> = mutableListOf()
+            list.add(t)
+            write(tmp,toJsonFromList(list))
+        }
+        overwrite(tmp,file)
     }
 
     /**
-     * Write to line to file
+     * Write line to file
      * @param file
-     * @param record
+     * @param line
      */
     fun writeLine(file : File, line : String){
         file.appendText(line+"\n")
+    }
+
+    /**
+     * Write to file
+     * @param file
+     * @param text
+     */
+    fun write(file : File, text : String){
+        file.appendText(text)
+    }
+
+    /**
+     * Overwrites file
+     * @param tmp new file
+     * @param perm staying file
+     */
+    fun overwrite(tmp : File, perm :File){
+        tmp.copyTo(perm, true)
+        tmp.delete()
     }
 
     /**
@@ -90,7 +126,7 @@ class IOwrap(ctx : Context, path : String) {
     fun open(fileName : String): File {
         dir.mkdirs()
         val file = File(dir, fileName)
-        if(file.exists())
+        if(file.exists() || fileName == "tmp")
             return file
         else
             file.appendText("")

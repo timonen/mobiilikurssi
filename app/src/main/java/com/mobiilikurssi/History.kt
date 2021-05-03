@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
-import java.io.File
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 /**
  * History Class
@@ -26,18 +28,11 @@ class History : AppCompatActivity() {
         setContentView(R.layout.activity_history)
         listView = findViewById<ListView>(R.id.historyList)
 
-        var f = io.open("test2.txt");
-
-        for(i in 1..10)
-            io.save(f,10f,10f, "$i.5.2021")
-
-        Log.d("IOwrap", "${io.read(f)}")
-
-        val list: MutableList<Template> = io.fromJsonToList("""[{"km":10.0,"kcal":10.0,"date":"test"},{"km":10.0,"kcal":10.0,"date":"test"}]""")
+        var mainf = io.open("data.json");
+        val list: MutableList<Template> = io.fromJsonToList(io.read(mainf))
 
         adapter = MyAdapter(this, list)
         listView.adapter = adapter
-
     }
 }
 

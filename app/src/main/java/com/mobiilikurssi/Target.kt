@@ -24,7 +24,7 @@ import kotlin.math.pow
  * @version 1.3
  */
 class Target : AppCompatActivity() {
-
+    private val io by lazy { IOwrap(this, "") }
     /**
      * @param savedInstanceState
      */
@@ -93,6 +93,10 @@ class Target : AppCompatActivity() {
                 var totalkm = pref.getFloat("totalkm", 0.0f)
                 totalkm += km
                 totalkcal += kcal
+
+                var file = io.open("data.json");
+                io.save(file, totalkm, totalkcal, SimpleDateFormat("dd.M.yyyy hh:mm:ss").format(Date()))
+
                 editor.putFloat("totalkcal", totalkcal)
                 editor.putFloat("totalkm", totalkm)
                 editor.apply()
