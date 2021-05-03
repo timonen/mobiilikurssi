@@ -1,11 +1,8 @@
 package com.mobiilikurssi
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.*
 import kotlin.math.pow
 
