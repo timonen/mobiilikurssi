@@ -18,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobiilikurssi">
-        <activity android:name=".History"></activity>
+        <activity
+            android:name=".History"
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".Goal"
             android:hardwareAccelerated="true" />

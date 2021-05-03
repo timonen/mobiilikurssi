@@ -3,16 +3,13 @@ package com.mobiilikurssi
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.*
+import java.lang.Exception
 
 /**
  * History Class
@@ -29,10 +26,11 @@ class History : AppCompatActivity() {
         listView = findViewById<ListView>(R.id.historyList)
 
         var mainf = io.open("data.json");
-        val list: MutableList<Template> = io.fromJsonToList(io.read(mainf))
-
-        adapter = MyAdapter(this, list)
-        listView.adapter = adapter
+        try {
+            val list: MutableList<Template> = io.fromJsonToList(io.read(mainf))
+            adapter = MyAdapter(this, list)
+            listView.adapter = adapter
+        } catch(e: Exception){}
     }
 }
 
