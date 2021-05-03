@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.PolylineOptions
  * @author Roope Rekunen, Valtteri Viirret
  */
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
     private val tracker by lazy { LocationTracker(this) }
 
@@ -140,9 +139,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(Intent(this, Settings::class.java))
         }
 
-        //  Go to the calendar menu when the button is pressed
+        findViewById<Button>(R.id.button_goals).setOnClickListener {
+            setIntentCalendar(false)
+        }
+
         findViewById<Button>(R.id.button_history).setOnClickListener {
-            startTarget(false)
+            startActivity(Intent(this, History::class.java))
         }
     }
 

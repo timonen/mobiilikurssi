@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION," />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobiilikurssi">
-        <activity android:name=".Goal" android:hardwareAccelerated="true" />
-        <activity android:name=".Target" android:hardwareAccelerated="true" />
-        <activity android:name=".Settings" android:hardwareAccelerated="true" />
+        <activity
+            android:name=".History"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".Goal"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".Target"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".Settings"
+            android:hardwareAccelerated="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -32,10 +42,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MapsActivity"
-            android:launchMode="standard"
-            android:hardwareAccelerated="true" >
-
+        <activity
+            android:name=".MapsActivity"
+            android:hardwareAccelerated="true"
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
