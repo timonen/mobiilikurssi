@@ -11,8 +11,14 @@ import kotlin.math.log
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
+/**
+ * Template for saving past trips
+ * @property km Float
+ * @property kcal Float
+ * @property date Date as String
+ */
 @Serializable
-data class Template(val km: Double, val kcal: Int, val date: String)
+data class Template(val km: Float, val kcal: Float, val date: String)
 
 /**
  * @author Roope Timonen
@@ -25,29 +31,49 @@ class IOwrap(ctx : Context, path : String) {
     private val dir = File(basePath, path)
 
     /**
-     * Test json to object conversion
+     * Convert JSON to Template
+     * @param json String
+     * @return Template
      */
-    fun fromJson() {
+    fun fromJson(json: String): Template {
         val format = Json { isLenient = true }
-        val data = format.decodeFromString<Template>("""
-        { 
-            km   : 100,
-            kcal  : 5000
-            date : "2.5.2021"
-        }
-    """)
-
+        val data = format.decodeFromString<Template>(json)
         Log.d("IOwrap", "${data.km}")
-
+        return data
     }
 
     /**
-     * Test object to json conversion
+     * Convert Template to JSON
+     * @param input Template
+     * @return JSON String
      */
-    fun toJson(){
+    fun toJson(input: Template): String {
         val format = Json { isLenient = true }
-        val data = Template(10.0, 102, "10.2.2021")
+        val data = format.encodeToString(input)
         Log.d("IOwrap", "$data")
+        return data
+    }
+
+    fun fromJsontest(json: String): MutableList<Template> {
+        val format = Json { isLenient = true }
+        val data = format.decodeFromString<MutableList<Template>>(json)
+        Log.d("IOwrap", "$data")
+        return data
+    }
+
+
+    /**
+     * TODO finish this
+     *
+     * Saves passed values as JSON object in file
+     * @param km
+     * @param kcal
+     * @param date
+     */
+    fun save(km: Float, kcal: Float, date: String){
+        //var whole = read();
+        val tmp = toJson(Template(km,kcal,date));
+
     }
 
     /**
@@ -65,7 +91,7 @@ class IOwrap(ctx : Context, path : String) {
      * @param fileName Filename
      * @return Created file
      */
-    fun create(fileName : String): File {
+    fun open(fileName : String): File {
         dir.mkdirs()
         val file = File(dir, fileName)
         if(file.exists())
