@@ -17,7 +17,7 @@ import java.lang.Exception
  */
 class History : AppCompatActivity() {
     lateinit var listView: ListView
-    var adapter: MyAdapter? = null
+    var adapter: Adapter? = null
     private val io by lazy { IOwrap(this, "") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class History : AppCompatActivity() {
         var mainf = io.open("data.json");
         try {
             val list: MutableList<Template> = io.fromJsonToList(io.read(mainf))
-            adapter = MyAdapter(this, list)
+            adapter = Adapter(this, list)
             listView.adapter = adapter
         } catch(e: Exception){}
     }
@@ -36,10 +36,11 @@ class History : AppCompatActivity() {
 
 /**
  * Custom adapter for creating rows
+ * @author Roope Timonen
  * @property context
  * @property arrayList
  */
-class MyAdapter(private val context: Context, private val arrayList: MutableList<Template>) : BaseAdapter() {
+class Adapter(private val context: Context, private val arrayList: MutableList<Template>) : BaseAdapter() {
     private lateinit var km: TextView
     private lateinit var kcal: TextView
     private lateinit var date: TextView

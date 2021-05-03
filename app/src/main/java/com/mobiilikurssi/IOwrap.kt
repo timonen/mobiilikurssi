@@ -7,6 +7,7 @@ import kotlinx.serialization.json.*
 
 /**
  * Template for saving past trips
+ * @author Roope Timonen
  * @property km Float
  * @property kcal Float
  * @property date Date as String
@@ -15,6 +16,7 @@ import kotlinx.serialization.json.*
 data class Template(val km: Float, val kcal: Float, val date: String)
 
 /**
+ * Wrapper class for file handling & json conversion
  * @author Roope Timonen
  * @constructor Set directory to operate in
  * @param ctx Context of app
